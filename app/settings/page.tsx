@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Header } from "@/components/Header";
+import { AccountSection } from "@/components/AccountSection";
 import { useSift } from "@/lib/store";
 import {
   REASON_LABELS,
