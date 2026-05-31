@@ -1,0 +1,580 @@
+import type { Recipe } from "./types";
+import { SEED_RECIPES_EXTRA } from "./seed-recipes-extra";
+
+/** Bundled sample recipes so the app is useful before any AI call. */
+const SEED_RECIPES_CORE: Recipe[] = [
+  {
+    id: "seed-caprese-chicken",
+    title: "Caprese Skillet Chicken",
+    cuisine: "italian",
+    description:
+      "Juicy pan-seared chicken topped with tomato, mozzarella, and basil. Naturally gluten-free, no substitutes needed.",
+    time: 25,
+    servings: 4,
+    difficulty: "easy",
+    mealType: "dinner",
+    ingredients: [
+      { name: "Chicken breasts", quantity: "4" },
+      { name: "Cherry tomatoes", quantity: "1 cup, halved" },
+      { name: "Fresh mozzarella", quantity: "4 oz, sliced" },
+      { name: "Fresh basil", quantity: "1/4 cup" },
+      { name: "Balsamic vinegar", quantity: "2 tbsp" },
+      { name: "Olive oil", quantity: "2 tbsp" },
+      { name: "Salt & pepper", quantity: "to taste" },
+    ],
+    steps: [
+      "Season chicken with salt and pepper.",
+      "Sear in olive oil over medium-high, 5–6 min per side.",
+      "Top each piece with mozzarella, cover, and melt 2 min.",
+      "Add tomatoes to the pan to soften slightly.",
+      "Finish with basil and a drizzle of balsamic.",
+    ],
+    glutenFreeNote:
+      "100% naturally gluten-free — safe even for strict/celiac eaters. Just check your balsamic is plain vinegar.",
+    source: "seed",
+  },
+  {
+    id: "seed-street-tacos",
+    title: "Corn Tortilla Street Tacos",
+    cuisine: "mexican",
+    description:
+      "Fast weeknight tacos on corn tortillas with a quick lime slaw.",
+    time: 20,
+    servings: 3,
+    difficulty: "easy",
+    mealType: "dinner",
+    ingredients: [
+      { name: "Corn tortillas", quantity: "9 small" },
+      { name: "Ground beef or chicken", quantity: "1 lb" },
+      { name: "Lime", quantity: "2" },
+      { name: "Cabbage", quantity: "2 cups shredded" },
+      { name: "Cilantro", quantity: "1/2 cup" },
+      { name: "Cumin & chili powder", quantity: "1 tsp each" },
+      { name: "Salt", quantity: "to taste" },
+    ],
+    steps: [
+      "Brown the meat with cumin, chili powder, and salt.",
+      "Toss cabbage with lime juice and a pinch of salt.",
+      "Warm corn tortillas in a dry skillet.",
+      "Fill with meat, slaw, and cilantro.",
+    ],
+    glutenFreeNote:
+      "Corn tortillas are gluten-free — confirm the package says GF (some are corn+wheat blends).",
+    source: "seed",
+  },
+  {
+    id: "seed-ratatouille",
+    title: "Weeknight Ratatouille",
+    cuisine: "french",
+    description:
+      "A rustic Provençal vegetable stew. Naturally gluten-free and great over rice or on its own.",
+    time: 40,
+    servings: 4,
+    difficulty: "medium",
+    mealType: "dinner",
+    ingredients: [
+      { name: "Eggplant", quantity: "1" },
+      { name: "Zucchini", quantity: "2" },
+      { name: "Bell peppers", quantity: "2" },
+      { name: "Tomatoes", quantity: "4 (or 1 can)" },
+      { name: "Onion", quantity: "1" },
+      { name: "Garlic", quantity: "3 cloves" },
+      { name: "Olive oil", quantity: "3 tbsp" },
+      { name: "Herbs de Provence", quantity: "1 tbsp" },
+    ],
+    steps: [
+      "Dice all vegetables into bite-size pieces.",
+      "Sauté onion and garlic in olive oil.",
+      "Add eggplant and peppers, cook 8 min.",
+      "Add zucchini and tomatoes with herbs; simmer 20 min.",
+      "Season and serve.",
+    ],
+    glutenFreeNote:
+      "Entirely whole-vegetable based — strict/celiac safe with no substitutions.",
+    source: "seed",
+  },
+  {
+    id: "seed-rice-bowl",
+    title: "Crispy Rice Power Bowl",
+    cuisine: "asian",
+    description:
+      "Quick rice bowl with tamari, egg, and whatever veg you have. Uses gluten-free tamari instead of soy sauce.",
+    time: 15,
+    servings: 2,
+    difficulty: "easy",
+    mealType: "lunch",
+    ingredients: [
+      { name: "Cooked rice", quantity: "2 cups" },
+      { name: "Eggs", quantity: "2" },
+      { name: "Tamari (GF soy sauce)", quantity: "2 tbsp" },
+      { name: "Mixed vegetables", quantity: "2 cups" },
+      { name: "Sesame oil", quantity: "1 tbsp" },
+      { name: "Green onion", quantity: "2 stalks" },
+    ],
+    steps: [
+      "Crisp the rice in sesame oil over high heat.",
+      "Push aside and scramble the eggs in the pan.",
+      "Add vegetables and tamari, toss 3 min.",
+      "Top with green onion.",
+    ],
+    glutenFreeNote:
+      "Swap soy sauce for tamari (certified GF). Regular soy sauce contains wheat.",
+    source: "seed",
+  },
+  {
+    id: "seed-flourless-brownies",
+    title: "Flourless Almond-Butter Brownies",
+    cuisine: "dessert",
+    description:
+      "Fudgy brownies made with almond butter instead of flour — naturally gluten-free and rich.",
+    time: 30,
+    servings: 9,
+    difficulty: "easy",
+    mealType: "dessert",
+    ingredients: [
+      { name: "Almond butter", quantity: "1 cup" },
+      { name: "Cocoa powder", quantity: "1/2 cup" },
+      { name: "Maple syrup or honey", quantity: "1/2 cup" },
+      { name: "Eggs", quantity: "2" },
+      { name: "Vanilla extract", quantity: "1 tsp" },
+      { name: "Baking soda", quantity: "1/2 tsp" },
+      { name: "Chocolate chips (GF)", quantity: "1/2 cup" },
+    ],
+    steps: [
+      "Heat oven to 350°F and line an 8x8 pan.",
+      "Whisk almond butter, syrup, eggs, and vanilla.",
+      "Stir in cocoa and baking soda, then chocolate chips.",
+      "Spread in pan and bake 18–22 min until set.",
+      "Cool before cutting.",
+    ],
+    glutenFreeNote:
+      "No flour at all — naturally GF. Confirm your cocoa and chips are labeled gluten-free.",
+    source: "seed",
+  },
+  {
+    id: "seed-berry-crisp",
+    title: "Oat & Almond Berry Crisp",
+    cuisine: "dessert",
+    description:
+      "Warm berries under a crunchy GF oat-almond topping. Cozy and naturally gluten-free.",
+    time: 40,
+    servings: 6,
+    difficulty: "easy",
+    mealType: "dessert",
+    ingredients: [
+      { name: "Mixed berries", quantity: "4 cups" },
+      { name: "Certified GF oats", quantity: "1 cup" },
+      { name: "Almond flour", quantity: "1/2 cup" },
+      { name: "Maple syrup", quantity: "1/3 cup" },
+      { name: "Butter or coconut oil", quantity: "1/4 cup" },
+      { name: "Cinnamon", quantity: "1 tsp" },
+    ],
+    steps: [
+      "Heat oven to 375°F. Spread berries in a baking dish.",
+      "Mix oats, almond flour, syrup, melted butter, and cinnamon.",
+      "Crumble topping over the berries.",
+      "Bake 25–30 min until golden and bubbling.",
+    ],
+    glutenFreeNote:
+      "Uses certified GF oats and almond flour instead of wheat. Use coconut oil to make it dairy-free.",
+    source: "seed",
+  },
+
+  // ---- Carnivore-friendly (animal products only) ----
+  {
+    id: "seed-cast-iron-ribeye",
+    title: "Cast-Iron Ribeye",
+    cuisine: "american",
+    description:
+      "A simple seared ribeye in its own rendered fat — naturally gluten-free and carnivore (lion-level too).",
+    time: 15,
+    servings: 1,
+    difficulty: "easy",
+    mealType: "dinner",
+    ingredients: [
+      { name: "Ribeye steak", quantity: "1 (12 oz)" },
+      { name: "Beef tallow", quantity: "1 tbsp" },
+      { name: "Sea salt", quantity: "to taste" },
+    ],
+    steps: [
+      "Pat the ribeye dry and salt generously.",
+      "Heat a cast-iron pan screaming hot with the tallow.",
+      "Sear 3–4 min per side for medium-rare; spoon hot fat over the top.",
+      "Rest 5 minutes before slicing.",
+    ],
+    glutenFreeNote:
+      "Just meat, fat, and salt — naturally gluten-free, dairy-free, and carnivore at every level including Lion.",
+    dairyFree: true,
+    carnivore: true,
+    source: "seed",
+  },
+  {
+    id: "seed-bacon-eggs",
+    title: "Bacon & Eggs Skillet",
+    cuisine: "american",
+    description:
+      "The classic carnivore breakfast — crispy bacon and eggs cooked in the rendered fat.",
+    time: 12,
+    servings: 1,
+    difficulty: "easy",
+    mealType: "breakfast",
+    ingredients: [
+      { name: "Bacon", quantity: "4 strips" },
+      { name: "Eggs", quantity: "3" },
+      { name: "Salt", quantity: "to taste" },
+      { name: "Pepper", quantity: "optional" },
+    ],
+    steps: [
+      "Cook bacon in a cold skillet over medium until crisp.",
+      "Remove bacon; crack eggs into the bacon fat.",
+      "Fry to your liking and season with salt.",
+      "Serve eggs with the bacon.",
+    ],
+    glutenFreeNote:
+      "Naturally gluten-free and dairy-free. Strict-carnivore friendly (no dairy or plants).",
+    dairyFree: true,
+    carnivore: true,
+    source: "seed",
+  },
+  {
+    id: "seed-garlic-butter-steak-bites",
+    title: "Garlic Butter Steak Bites",
+    cuisine: "american",
+    description:
+      "Quick seared sirloin cubes finished in garlic butter — carnivore at the dairy/relaxed level.",
+    time: 20,
+    servings: 2,
+    difficulty: "easy",
+    mealType: "dinner",
+    ingredients: [
+      { name: "Sirloin steak", quantity: "1 lb, cubed" },
+      { name: "Butter", quantity: "3 tbsp" },
+      { name: "Garlic", quantity: "2 cloves" },
+      { name: "Salt", quantity: "to taste" },
+      { name: "Pepper", quantity: "to taste" },
+    ],
+    steps: [
+      "Pat steak cubes dry and salt well.",
+      "Sear in a hot pan in batches until browned, ~2 min.",
+      "Lower heat, add butter and garlic, toss 1 min.",
+      "Season and serve.",
+    ],
+    glutenFreeNote:
+      "Gluten-free. Carnivore at the +dairy or relaxed level (uses butter & garlic); swap butter for tallow and drop garlic for strict.",
+    dairyFree: false,
+    carnivore: true,
+    source: "seed",
+  },
+  {
+    id: "seed-pan-seared-salmon",
+    title: "Pan-Seared Salmon",
+    cuisine: "american",
+    description:
+      "Crisp-skinned salmon with nothing but salt — light, fast, strict-carnivore friendly.",
+    time: 15,
+    servings: 2,
+    difficulty: "easy",
+    mealType: "dinner",
+    ingredients: [
+      { name: "Salmon fillets", quantity: "2" },
+      { name: "Beef tallow", quantity: "1 tbsp" },
+      { name: "Salt", quantity: "to taste" },
+    ],
+    steps: [
+      "Pat salmon dry and salt the skin.",
+      "Sear skin-side down in tallow over medium-high, 4 min.",
+      "Flip and cook 2–3 min more until just opaque.",
+    ],
+    glutenFreeNote:
+      "Naturally gluten-free, dairy-free, and strict-carnivore friendly.",
+    dairyFree: true,
+    carnivore: true,
+    source: "seed",
+  },
+
+  // ---- More carnivore variety (incl. Lion-level ruminant) ----
+  {
+    id: "seed-lamb-chops",
+    title: "Salt-Crusted Lamb Chops",
+    cuisine: "american",
+    description:
+      "Simple pan-seared lamb chops with just salt — Lion-level carnivore and deeply savory.",
+    time: 18,
+    servings: 2,
+    difficulty: "easy",
+    mealType: "dinner",
+    ingredients: [
+      { name: "Lamb chops", quantity: "4" },
+      { name: "Beef tallow", quantity: "1 tbsp" },
+      { name: "Sea salt", quantity: "to taste" },
+    ],
+    steps: [
+      "Salt the lamb chops well and let sit 10 min.",
+      "Sear in tallow over medium-high, 3 min per side.",
+      "Rest 5 min before serving.",
+    ],
+    glutenFreeNote:
+      "Just ruminant meat, fat, and salt — gluten-free, dairy-free, and Lion-level carnivore safe.",
+    dairyFree: true,
+    carnivore: true,
+    source: "seed",
+  },
+  {
+    id: "seed-beef-burger-patties",
+    title: "Salt & Pepper Beef Patties",
+    cuisine: "american",
+    description:
+      "Juicy seasoned ground-beef patties, no bun — a fast strict-carnivore staple.",
+    time: 15,
+    servings: 3,
+    difficulty: "easy",
+    mealType: "lunch",
+    ingredients: [
+      { name: "Ground beef (80/20)", quantity: "1.5 lb" },
+      { name: "Salt", quantity: "to taste" },
+      { name: "Pepper", quantity: "to taste" },
+    ],
+    steps: [
+      "Form beef into 3–4 patties; season both sides.",
+      "Sear in a hot dry skillet 3–4 min per side.",
+      "Rest briefly and serve.",
+    ],
+    glutenFreeNote:
+      "Beef + salt + pepper only — gluten-free, dairy-free, strict-carnivore (Lion if you skip the pepper).",
+    dairyFree: true,
+    carnivore: true,
+    source: "seed",
+  },
+  {
+    id: "seed-beef-liver",
+    title: "Pan-Fried Beef Liver",
+    cuisine: "american",
+    description:
+      "Nutrient-dense beef liver quickly seared in tallow — a carnivore superfood.",
+    time: 15,
+    servings: 2,
+    difficulty: "medium",
+    mealType: "dinner",
+    ingredients: [
+      { name: "Beef liver", quantity: "1 lb, sliced" },
+      { name: "Beef tallow", quantity: "2 tbsp" },
+      { name: "Salt", quantity: "to taste" },
+    ],
+    steps: [
+      "Pat liver dry and salt it.",
+      "Sear in hot tallow ~2 min per side — don't overcook.",
+      "Serve while just pink inside.",
+    ],
+    glutenFreeNote:
+      "Ruminant organ meat + fat + salt — gluten-free, dairy-free, Lion-level carnivore safe.",
+    dairyFree: true,
+    carnivore: true,
+    source: "seed",
+  },
+  {
+    id: "seed-cheese-crusted-steak",
+    title: "Parmesan-Crusted Steak",
+    cuisine: "italian",
+    description:
+      "Seared steak finished with a crispy parmesan crust — carnivore at the +dairy level.",
+    time: 20,
+    servings: 2,
+    difficulty: "easy",
+    mealType: "dinner",
+    ingredients: [
+      { name: "Sirloin or ribeye", quantity: "2 steaks" },
+      { name: "Parmesan", quantity: "1/2 cup, grated" },
+      { name: "Butter", quantity: "1 tbsp" },
+      { name: "Salt", quantity: "to taste" },
+    ],
+    steps: [
+      "Salt and sear steaks to your liking; remove.",
+      "Sprinkle parmesan in the pan to crisp 1 min.",
+      "Lay steaks on the crust and serve cheese-side up.",
+    ],
+    glutenFreeNote:
+      "Gluten-free; carnivore at the +dairy/relaxed level (uses parmesan & butter).",
+    dairyFree: false,
+    carnivore: true,
+    source: "seed",
+  },
+  {
+    id: "seed-egg-drop-soup",
+    title: "Bone Broth Egg Drop Soup",
+    cuisine: "asian",
+    description:
+      "Silky eggs swirled into rich bone broth — warming and strict-carnivore friendly.",
+    time: 12,
+    servings: 2,
+    difficulty: "easy",
+    mealType: "soup",
+    ingredients: [
+      { name: "Beef or chicken bone broth", quantity: "4 cups" },
+      { name: "Eggs", quantity: "3" },
+      { name: "Salt", quantity: "to taste" },
+    ],
+    steps: [
+      "Bring bone broth to a gentle simmer and salt it.",
+      "Beat the eggs, then drizzle in slowly while stirring.",
+      "Cook 1 min until the eggs set into ribbons.",
+    ],
+    glutenFreeNote:
+      "Broth + eggs + salt — gluten-free, dairy-free, strict-carnivore friendly. Confirm the broth has no additives.",
+    dairyFree: true,
+    carnivore: true,
+    source: "seed",
+  },
+
+  // ---- Missing cuisines + browse variety ----
+  {
+    id: "seed-greek-chicken-bowl",
+    title: "Greek Lemon Chicken Bowl",
+    cuisine: "mediterranean",
+    description:
+      "Grilled lemon-herb chicken over rice with cucumber and olives — bright and naturally gluten-free.",
+    time: 30,
+    servings: 4,
+    difficulty: "easy",
+    mealType: "dinner",
+    ingredients: [
+      { name: "Chicken thighs", quantity: "1.5 lb" },
+      { name: "Lemon", quantity: "2" },
+      { name: "Olive oil", quantity: "3 tbsp" },
+      { name: "Oregano", quantity: "1 tbsp" },
+      { name: "Garlic", quantity: "3 cloves" },
+      { name: "Cooked rice", quantity: "3 cups" },
+      { name: "Cucumber", quantity: "1" },
+      { name: "Kalamata olives", quantity: "1/2 cup" },
+    ],
+    steps: [
+      "Marinate chicken in lemon, oil, oregano, and garlic 15 min.",
+      "Grill or pan-sear until cooked through.",
+      "Serve over rice with cucumber and olives.",
+    ],
+    glutenFreeNote:
+      "Naturally gluten-free — whole ingredients, no wheat. Use coconut yogurt for a dairy-free tzatziki.",
+    dairyFree: true,
+    source: "seed",
+  },
+  {
+    id: "seed-chicken-tikka",
+    title: "Chicken Tikka Skillet",
+    cuisine: "indian",
+    description:
+      "Yogurt-marinated spiced chicken seared in a skillet — naturally gluten-free and full of flavor.",
+    time: 35,
+    servings: 4,
+    difficulty: "medium",
+    mealType: "dinner",
+    ingredients: [
+      { name: "Chicken breast", quantity: "1.5 lb, cubed" },
+      { name: "Plain yogurt", quantity: "1/2 cup" },
+      { name: "Garam masala", quantity: "1 tbsp" },
+      { name: "Turmeric", quantity: "1 tsp" },
+      { name: "Ginger", quantity: "1 tbsp grated" },
+      { name: "Garlic", quantity: "3 cloves" },
+      { name: "Lemon", quantity: "1" },
+    ],
+    steps: [
+      "Mix yogurt, spices, ginger, garlic, and lemon; marinate chicken 20 min.",
+      "Sear in a hot skillet until charred and cooked through.",
+      "Serve with rice or a cucumber salad.",
+    ],
+    glutenFreeNote:
+      "Spices and yogurt are naturally gluten-free — confirm your garam masala blend has no fillers. Use coconut yogurt to make it dairy-free.",
+    dairyFree: false,
+    source: "seed",
+  },
+  {
+    id: "seed-chickpea-curry",
+    title: "Coconut Chickpea Curry",
+    cuisine: "indian",
+    description:
+      "A cozy vegan chickpea curry in coconut milk — naturally gluten-free and dairy-free.",
+    time: 30,
+    servings: 4,
+    difficulty: "easy",
+    mealType: "dinner",
+    ingredients: [
+      { name: "Chickpeas", quantity: "2 cans" },
+      { name: "Coconut milk", quantity: "1 can" },
+      { name: "Onion", quantity: "1" },
+      { name: "Garlic", quantity: "3 cloves" },
+      { name: "Curry powder", quantity: "2 tbsp" },
+      { name: "Canned tomatoes", quantity: "1 can" },
+      { name: "Spinach", quantity: "2 cups" },
+    ],
+    steps: [
+      "Sauté onion and garlic until soft.",
+      "Add curry powder, tomatoes, and coconut milk; simmer 10 min.",
+      "Stir in chickpeas and spinach; simmer 10 min more.",
+      "Serve over rice.",
+    ],
+    glutenFreeNote:
+      "Naturally gluten-free and dairy-free. Confirm your curry powder is a pure spice blend.",
+    dairyFree: true,
+    source: "seed",
+  },
+  {
+    id: "seed-shrimp-zoodles",
+    title: "Garlic Shrimp Zoodles",
+    cuisine: "italian",
+    description:
+      "Garlicky shrimp over zucchini noodles — light, fast, naturally gluten-free.",
+    time: 20,
+    servings: 2,
+    difficulty: "easy",
+    mealType: "dinner",
+    ingredients: [
+      { name: "Shrimp", quantity: "1 lb" },
+      { name: "Zucchini", quantity: "3, spiralized" },
+      { name: "Garlic", quantity: "4 cloves" },
+      { name: "Olive oil", quantity: "2 tbsp" },
+      { name: "Lemon", quantity: "1" },
+      { name: "Red pepper flakes", quantity: "pinch" },
+    ],
+    steps: [
+      "Sauté garlic in olive oil, add shrimp and cook 2 min per side.",
+      "Add zoodles and toss 2 min until just tender.",
+      "Finish with lemon and red pepper flakes.",
+    ],
+    glutenFreeNote:
+      "Naturally gluten-free and dairy-free — zucchini noodles replace pasta entirely.",
+    dairyFree: true,
+    source: "seed",
+  },
+  {
+    id: "seed-carnitas-bowl",
+    title: "Pork Carnitas Bowl",
+    cuisine: "mexican",
+    description:
+      "Crispy slow-cooked pork over rice and beans with salsa — naturally gluten-free.",
+    time: 45,
+    servings: 4,
+    difficulty: "medium",
+    mealType: "dinner",
+    ingredients: [
+      { name: "Pork shoulder", quantity: "2 lb" },
+      { name: "Orange", quantity: "1" },
+      { name: "Cumin", quantity: "1 tbsp" },
+      { name: "Garlic", quantity: "4 cloves" },
+      { name: "Cooked rice", quantity: "3 cups" },
+      { name: "Black beans", quantity: "1 can" },
+      { name: "Salsa", quantity: "1 cup" },
+    ],
+    steps: [
+      "Season pork with cumin, garlic, salt; add orange juice.",
+      "Slow-cook until tender, then crisp under the broiler.",
+      "Serve over rice and beans with salsa.",
+    ],
+    glutenFreeNote:
+      "Naturally gluten-free and dairy-free — confirm your salsa has no additives.",
+    dairyFree: true,
+    source: "seed",
+  },
+];
+
+export const SEED_RECIPES: Recipe[] = [
+  ...SEED_RECIPES_CORE,
+  ...SEED_RECIPES_EXTRA,
+];
