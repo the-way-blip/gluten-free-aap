@@ -43,7 +43,11 @@ export function RecipeCard({ recipe }: { recipe: Recipe }) {
   return (
     <div className="card overflow-hidden">
       <button
-        onClick={() => setOpen((o) => !o)}
+        onClick={() => {
+          const next = !open;
+          setOpen(next);
+          if (next) markRecipeViewed(recipe);
+        }}
         className="flex w-full items-start justify-between gap-3 p-4 text-left"
       >
         <div>
