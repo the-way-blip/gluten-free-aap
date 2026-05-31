@@ -62,11 +62,12 @@ export function CloudSync() {
     (async () => {
       try {
         const res = await fetch("/api/sync");
-        if (!res.ok) return; // 501 = not configured, 401 = race; stay local
+        if (!res.ok) return; // 401 race etc; stay local
         const json = (await res.json()) as {
           enabled?: boolean;
           data?: Record<string, unknown> | null;
         };
+        if (json.enabled === false) return; // cloud not configured; stay local
         if (json.data && Object.keys(json.data).length > 0) {
           applySnapshot(json.data);
           lastPushed.current = JSON.stringify(json.data);
