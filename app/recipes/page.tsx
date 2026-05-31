@@ -19,6 +19,7 @@ export default function RecipesPage() {
   const [tab, setTab] = useState<Tab>("discover");
   const [cuisine, setCuisine] = useState<Cuisine>("any");
   const [filters, setFilters] = useState<RecipeFilters>({});
+  const [query, setQuery] = useState("");
   const [generated, setGenerated] = useState<Recipe[]>([]);
   const [loading, setLoading] = useState(false);
   const [mode, setMode] = useState<string | null>(null);
@@ -48,6 +49,7 @@ export default function RecipesPage() {
   const carnDairyOk =
     (carnLevel === "dairy" || carnLevel === "relaxed") && !wantDairyFree;
 
+  const q = query.trim().toLowerCase();
   const browse = SEED_RECIPES.filter((r) => {
     if (cuisine !== "any" && r.cuisine !== cuisine) return false;
     if (wantDairyFree && !recipeLooksDairyFree(r)) return false;
@@ -66,6 +68,17 @@ export default function RecipesPage() {
       r.difficulty !== filters.difficulty
     )
       return false;
+    if (q) {
+      const hay =
+        r.title.toLowerCase() +
+        " " +
+        r.cuisine +
+        " " +
+        r.description.toLowerCase() +
+        " " +
+        r.ingredients.map((i) => i.name.toLowerCase()).join(" ");
+      if (!hay.includes(q)) return false;
+    }
     return true;
   });
 
@@ -85,6 +98,23 @@ export default function RecipesPage() {
 
         {tab === "discover" && (
           <div className="space-y-4">
+            <div className="relative">
+              <input
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+                placeholder="Search recipes & ingredients…"
+                className="w-full rounded-xl border border-grain-200 bg-white px-4 py-2.5 pr-9 text-grain-900 outline-none focus:border-leaf-500"
+              />
+              {query && (
+                <button
+                  onClick={() => setQuery("")}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                  aria-label="Clear search"
+                >
+                  ×
+                </button>
+              )}
+            </div>
             <CuisinePicker value={cuisine} onChange={setCuisine} />
             <RecipeControls filters={filters} onChange={setFilters} />
 
@@ -116,13 +146,16 @@ export default function RecipesPage() {
 
             <section className="space-y-3">
               <h2 className="text-sm font-semibold uppercase tracking-wide text-gray-400">
-                Browse
+                {q ? `Results (${browse.length})` : `Browse (${browse.length})`}
               </h2>
               {browse.length > 0 ? (
                 browse.map((r) => <RecipeCard key={r.id} recipe={r} />)
               ) : (
                 <div className="card px-6 py-8 text-center text-sm text-gray-500">
-                  No saved samples match these filters. Tap{" "}
+                  {q
+                    ? `No recipes match “${query}” with these filters. `
+                    : "No saved samples match these filters. "}
+                  Tap{" "}
                   <span className="font-semibold text-leaf-700">
                     Generate fresh recipes
                   </span>{" "}

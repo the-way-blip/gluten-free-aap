@@ -21,6 +21,7 @@ const SIFT_KEYS = [
   "sift.mealPlan",
   "sift.reactions",
   "sift.startTasks",
+  "sift.recentRecipes",
 ];
 
 function snapshot(): Record<string, unknown> {

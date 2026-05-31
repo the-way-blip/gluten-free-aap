@@ -24,7 +24,10 @@ const KEYS = {
   plan: "sift.mealPlan",
   reactions: "sift.reactions",
   startTasks: "sift.startTasks",
+  recent: "sift.recentRecipes",
 } as const;
+
+const RECENT_MAX = 8;
 
 function load<T>(key: string, fallback: T): T {
   if (typeof window === "undefined") return fallback;
@@ -72,6 +75,10 @@ interface SiftState {
   unsaveRecipe: (id: string) => void;
   isSaved: (id: string) => boolean;
 
+  /** Most-recently-opened recipes, newest first (capped). */
+  recentRecipes: Recipe[];
+  markRecipeViewed: (r: Recipe) => void;
+
   mealPlan: PlannedMeal[];
   addToPlan: (day: string, recipe: Recipe) => void;
   removeFromPlan: (id: string) => void;
@@ -97,6 +104,7 @@ export function SiftProvider({ children }: { children: React.ReactNode }) {
   const [mealPlan, setMealPlan] = useState<PlannedMeal[]>([]);
   const [reactions, setReactions] = useState<ReactionEntry[]>([]);
   const [startTasks, setStartTasks] = useState<string[]>([]);
+  const [recentRecipes, setRecentRecipes] = useState<Recipe[]>([]);
 
   useEffect(() => {
     const loadAll = () => {
@@ -107,6 +115,7 @@ export function SiftProvider({ children }: { children: React.ReactNode }) {
       setMealPlan(load<PlannedMeal[]>(KEYS.plan, []));
       setReactions(load<ReactionEntry[]>(KEYS.reactions, []));
       setStartTasks(load<string[]>(KEYS.startTasks, []));
+      setRecentRecipes(load<Recipe[]>(KEYS.recent, []));
       setReady(true);
     };
     loadAll();
@@ -295,6 +304,8 @@ export function SiftProvider({ children }: { children: React.ReactNode }) {
     saveRecipe,
     unsaveRecipe,
     isSaved,
+    recentRecipes,
+    markRecipeViewed,
     mealPlan,
     addToPlan,
     removeFromPlan,

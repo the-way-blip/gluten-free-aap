@@ -4,10 +4,19 @@ import Link from "next/link";
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useSift } from "@/lib/store";
+import { RecipeCard } from "@/components/RecipeCard";
 import { summarizeProfile, STRICTNESS_LABELS } from "@/lib/profile";
 
 export default function HomePage() {
-  const { ready, profile, pantry, shopping, saved, startTasks } = useSift();
+  const {
+    ready,
+    profile,
+    pantry,
+    shopping,
+    saved,
+    startTasks,
+    recentRecipes,
+  } = useSift();
   const router = useRouter();
 
   // First run → onboarding.
@@ -157,6 +166,33 @@ export default function HomePage() {
             href="/shopping-list"
           />
         </section>
+
+        {saved.length > 0 && (
+          <section className="space-y-3">
+            <div className="flex items-center justify-between">
+              <h2 className="text-sm font-semibold uppercase tracking-wide text-gray-400">
+                ★ Saved recipes
+              </h2>
+              <Link href="/recipes" className="text-sm font-semibold text-leaf-600">
+                See all
+              </Link>
+            </div>
+            {saved.slice(0, 3).map((r) => (
+              <RecipeCard key={r.id} recipe={r} />
+            ))}
+          </section>
+        )}
+
+        {recentRecipes.length > 0 && (
+          <section className="space-y-3">
+            <h2 className="text-sm font-semibold uppercase tracking-wide text-gray-400">
+              🕘 Recently viewed
+            </h2>
+            {recentRecipes.slice(0, 3).map((r) => (
+              <RecipeCard key={`recent-${r.id}`} recipe={r} />
+            ))}
+          </section>
+        )}
 
         <section className="card p-5">
           <h3 className="font-semibold text-grain-900">Your safety profile</h3>
