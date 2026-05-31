@@ -1,4 +1,4 @@
-import { NextResponse, type NextRequest } from "next/server";
+import { NextResponse, type NextRequest, type NextFetchEvent } from "next/server";
 
 /**
  * Auth middleware is only active when Clerk is configured. Without keys this is
@@ -8,12 +8,15 @@ import { NextResponse, type NextRequest } from "next/server";
  */
 const CLERK_ENABLED = !!process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY;
 
-export default async function middleware(req: NextRequest) {
+export default async function middleware(
+  req: NextRequest,
+  event: NextFetchEvent
+) {
   if (!CLERK_ENABLED) return NextResponse.next();
   const { clerkMiddleware } = await import("@clerk/nextjs/server");
-  // clerkMiddleware attaches auth context; we don't protect any routes by
-  // default (the app is usable signed-out), so just let it run.
-  return clerkMiddleware()(req, {} as never);
+  // No routes are protected by default (the app is usable signed-out); this
+  // just attaches Clerk's auth context so /api/sync can read the user id.
+  return clerkMiddleware()(req, event);
 }
 
 export const config = {
