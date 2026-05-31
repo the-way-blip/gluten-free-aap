@@ -99,14 +99,21 @@ export function SiftProvider({ children }: { children: React.ReactNode }) {
   const [startTasks, setStartTasks] = useState<string[]>([]);
 
   useEffect(() => {
-    setProfileState(load<GFProfile | null>(KEYS.profile, null));
-    setPantry(load<PantryItem[]>(KEYS.pantry, []));
-    setShopping(load<ShoppingItem[]>(KEYS.shopping, []));
-    setSaved(load<Recipe[]>(KEYS.saved, []));
-    setMealPlan(load<PlannedMeal[]>(KEYS.plan, []));
-    setReactions(load<ReactionEntry[]>(KEYS.reactions, []));
-    setStartTasks(load<string[]>(KEYS.startTasks, []));
-    setReady(true);
+    const loadAll = () => {
+      setProfileState(load<GFProfile | null>(KEYS.profile, null));
+      setPantry(load<PantryItem[]>(KEYS.pantry, []));
+      setShopping(load<ShoppingItem[]>(KEYS.shopping, []));
+      setSaved(load<Recipe[]>(KEYS.saved, []));
+      setMealPlan(load<PlannedMeal[]>(KEYS.plan, []));
+      setReactions(load<ReactionEntry[]>(KEYS.reactions, []));
+      setStartTasks(load<string[]>(KEYS.startTasks, []));
+      setReady(true);
+    };
+    loadAll();
+    // CloudSync dispatches this after pulling the user's data from the cloud,
+    // so the UI reflects synced state without a page reload.
+    window.addEventListener("sift:reload", loadAll);
+    return () => window.removeEventListener("sift:reload", loadAll);
   }, []);
 
   const setProfile = useCallback((p: GFProfile) => {

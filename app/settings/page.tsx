@@ -107,6 +107,8 @@ export default function SettingsPage() {
       <Header title="Settings" subtitle="Tune your gluten-free profile" />
 
       <div className="space-y-6 px-5 pt-4">
+        <AccountSection />
+
         <section className="card p-4">
           <p className="text-xs font-semibold uppercase tracking-wide text-gray-400">
             Eating gluten-free for

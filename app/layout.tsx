@@ -1,7 +1,10 @@
 import type { Metadata, Viewport } from "next";
+import { ClerkProvider } from "@clerk/nextjs";
 import "./globals.css";
 import { SiftProvider } from "@/lib/store";
 import { Nav } from "@/components/Nav";
+import { CloudSync } from "@/components/CloudSync";
+import { CLERK_ENABLED } from "@/lib/cloud-config";
 
 export const metadata: Metadata = {
   title: "Sift — Eat gluten-free with confidence",
@@ -26,7 +29,7 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  return (
+  const body = (
     <html lang="en">
       <head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -42,6 +45,7 @@ export default function RootLayout({
       </head>
       <body className="font-sans antialiased">
         <SiftProvider>
+          {CLERK_ENABLED && <CloudSync />}
           <div className="mx-auto min-h-screen max-w-md pb-24 shadow-xl sm:my-0 sm:min-h-screen">
             {children}
           </div>
@@ -50,4 +54,11 @@ export default function RootLayout({
       </body>
     </html>
   );
+
+  // Only wrap in ClerkProvider when configured, so an unkeyed build/deploy
+  // behaves exactly like the original local-only app.
+  if (CLERK_ENABLED) {
+    return <ClerkProvider>{body}</ClerkProvider>;
+  }
+  return body;
 }
