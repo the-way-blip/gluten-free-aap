@@ -6,8 +6,14 @@ import { useSift } from "@/lib/store";
 
 export function RecipeCard({ recipe }: { recipe: Recipe }) {
   const [open, setOpen] = useState(false);
-  const { saveRecipe, unsaveRecipe, isSaved, addShoppingItems, pantry } =
-    useSift();
+  const {
+    saveRecipe,
+    unsaveRecipe,
+    isSaved,
+    addShoppingItems,
+    pantry,
+    markRecipeViewed,
+  } = useSift();
 
   const saved = isSaved(recipe.id);
 
