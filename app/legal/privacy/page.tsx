@@ -24,8 +24,7 @@ export default function PrivacyPage() {
             </li>
             <li>
               Your app data (dietary profile, pantry, saved recipes, shopping
-              list, saved restaurants, reaction journal) — to provide the
-              service and sync it.
+              list, saved restaurants) — to provide the service and sync it.
             </li>
             <li>
               Payment status via our payment provider. We never see or store

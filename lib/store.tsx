@@ -11,7 +11,6 @@ import type {
   GFProfile,
   PantryItem,
   PlannedMeal,
-  ReactionEntry,
   Recipe,
   Restaurant,
   ShoppingItem,
@@ -23,7 +22,6 @@ const KEYS = {
   shopping: "sift.shopping",
   saved: "sift.savedRecipes",
   plan: "sift.mealPlan",
-  reactions: "sift.reactions",
   startTasks: "sift.startTasks",
   recent: "sift.recentRecipes",
   savedRestaurants: "sift.savedRestaurants",
@@ -92,10 +90,6 @@ interface SiftState {
   removeFromPlan: (id: string) => void;
   clearPlan: () => void;
 
-  reactions: ReactionEntry[];
-  addReaction: (entry: Omit<ReactionEntry, "id" | "createdAt">) => void;
-  removeReaction: (id: string) => void;
-
   /** Completed "Start Here" checklist task ids. */
   startTasks: string[];
   toggleStartTask: (id: string) => void;
@@ -110,7 +104,6 @@ export function SiftProvider({ children }: { children: React.ReactNode }) {
   const [shopping, setShopping] = useState<ShoppingItem[]>([]);
   const [saved, setSaved] = useState<Recipe[]>([]);
   const [mealPlan, setMealPlan] = useState<PlannedMeal[]>([]);
-  const [reactions, setReactions] = useState<ReactionEntry[]>([]);
   const [startTasks, setStartTasks] = useState<string[]>([]);
   const [recentRecipes, setRecentRecipes] = useState<Recipe[]>([]);
   const [savedRestaurants, setSavedRestaurants] = useState<Restaurant[]>([]);
@@ -122,7 +115,6 @@ export function SiftProvider({ children }: { children: React.ReactNode }) {
       setShopping(load<ShoppingItem[]>(KEYS.shopping, []));
       setSaved(load<Recipe[]>(KEYS.saved, []));
       setMealPlan(load<PlannedMeal[]>(KEYS.plan, []));
-      setReactions(load<ReactionEntry[]>(KEYS.reactions, []));
       setStartTasks(load<string[]>(KEYS.startTasks, []));
       setRecentRecipes(load<Recipe[]>(KEYS.recent, []));
       setSavedRestaurants(load<Restaurant[]>(KEYS.savedRestaurants, []));
@@ -297,28 +289,6 @@ export function SiftProvider({ children }: { children: React.ReactNode }) {
     save(KEYS.plan, []);
   }, []);
 
-  const addReaction = useCallback(
-    (entry: Omit<ReactionEntry, "id" | "createdAt">) => {
-      setReactions((prev) => {
-        const next = [
-          { ...entry, id: uid(), createdAt: Date.now() },
-          ...prev,
-        ];
-        save(KEYS.reactions, next);
-        return next;
-      });
-    },
-    []
-  );
-
-  const removeReaction = useCallback((id: string) => {
-    setReactions((prev) => {
-      const next = prev.filter((r) => r.id !== id);
-      save(KEYS.reactions, next);
-      return next;
-    });
-  }, []);
-
   const toggleStartTask = useCallback((id: string) => {
     setStartTasks((prev) => {
       const next = prev.includes(id)
@@ -357,9 +327,6 @@ export function SiftProvider({ children }: { children: React.ReactNode }) {
     addToPlan,
     removeFromPlan,
     clearPlan,
-    reactions,
-    addReaction,
-    removeReaction,
     startTasks,
     toggleStartTask,
   };

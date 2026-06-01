@@ -28,7 +28,7 @@ function AccountInner() {
       <div className="card p-4">
         <SignedOut>
           <p className="text-sm text-gray-600">
-            Sign in to back up your profile, pantry, recipes, and journal and
+            Sign in to back up your profile, pantry, recipes, and lists and
             sync them across your devices.
           </p>
           <SignInButton mode="modal">

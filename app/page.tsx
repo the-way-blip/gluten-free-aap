@@ -145,13 +145,6 @@ export default function HomePage() {
               emoji="🔍"
             />
             <ActionCard
-              href="/journal"
-              title="Food diary"
-              desc="Track meals & how you feel"
-              accent="bg-pink-50 text-pink-700"
-              emoji="📓"
-            />
-            <ActionCard
               href="/learn"
               title="Learn"
               desc="Guides & getting started"

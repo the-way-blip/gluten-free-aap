@@ -130,14 +130,6 @@ export const START_SECTIONS: StartSection[] = [
         detail:
           "Pills can use wheat starch as a binder, and aren't always labeled. Confirm with your pharmacist.",
       },
-      {
-        id: "start-journal",
-        title: "Start a reaction journal",
-        detail:
-          "Logging how you feel after meals helps you (and your doctor) spot repeat triggers over time.",
-        href: "/journal",
-        hrefLabel: "Open journal",
-      },
     ],
   },
 ];

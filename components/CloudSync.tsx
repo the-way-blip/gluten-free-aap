@@ -19,7 +19,6 @@ const SIFT_KEYS = [
   "sift.shopping",
   "sift.savedRecipes",
   "sift.mealPlan",
-  "sift.reactions",
   "sift.startTasks",
   "sift.recentRecipes",
   "sift.savedRestaurants",

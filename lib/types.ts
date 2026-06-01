@@ -144,28 +144,6 @@ export interface PlannedMeal {
   recipe: Recipe;
 }
 
-// ---- Reaction journal ----
-
-export type ReactionSeverity = "mild" | "moderate" | "severe";
-
-/** What the user thinks triggered the reaction. */
-export type ReactionTrigger = "gluten" | "dairy" | "both" | "unsure";
-
-export interface ReactionEntry {
-  id: string;
-  /** ISO date string (YYYY-MM-DD). */
-  date: string;
-  severity: ReactionSeverity;
-  /** Suspected culprit category — gluten, dairy, both, or unsure. */
-  trigger: ReactionTrigger;
-  /** Symptom tags. */
-  symptoms: string[];
-  /** What they think caused it. */
-  suspectedFood: string;
-  notes?: string;
-  createdAt: number;
-}
-
 // ---- Shopping list ----
 
 export interface ShoppingItem {

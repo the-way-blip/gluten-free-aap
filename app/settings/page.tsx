@@ -99,7 +99,6 @@ export default function SettingsPage() {
         "sift.savedRestaurants",
         "sift.recentRecipes",
         "sift.mealPlan",
-        "sift.reactions",
       ].forEach((k) => window.localStorage.removeItem(k));
       clearProfile();
       router.replace("/onboarding");
