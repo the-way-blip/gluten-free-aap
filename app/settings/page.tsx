@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Header } from "@/components/Header";
 import { AccountSection } from "@/components/AccountSection";
@@ -357,11 +358,35 @@ export default function SettingsPage() {
           </button>
         </section>
 
+        <section>
+          <h2 className="mb-2 text-sm font-semibold uppercase tracking-wide text-gray-400">
+            About
+          </h2>
+          <div className="card divide-y divide-grain-100">
+            <FooterLink href="/pricing" label="✨ Sift Premium" />
+            <FooterLink href="/legal/disclaimer" label="Medical disclaimer" />
+            <FooterLink href="/legal/terms" label="Terms of Service" />
+            <FooterLink href="/legal/privacy" label="Privacy Policy" />
+          </div>
+        </section>
+
         <p className="pb-2 text-center text-xs text-gray-400">
           Changes save automatically and update your recipes and restaurant
           grades instantly.
         </p>
       </div>
     </div>
+  );
+}
+
+function FooterLink({ href, label }: { href: string; label: string }) {
+  return (
+    <Link
+      href={href}
+      className="flex items-center justify-between px-4 py-3 text-sm text-grain-800"
+    >
+      {label}
+      <span className="text-gray-300">›</span>
+    </Link>
   );
 }
