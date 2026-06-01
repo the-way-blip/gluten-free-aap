@@ -1,8 +1,52 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-  <rect width="512" height="512" fill="#368856"/>
-  <g fill="none" stroke="#ffffff" stroke-width="26" stroke-linecap="round" stroke-linejoin="round">
-    <path d="M150 150 h212 l-22 132 a84 84 0 0 1 -168 0 z"/>
-    <path d="M196 150 v-26 M256 150 v-26 M316 150 v-26"/>
-    <path d="M214 340 v52 M298 340 v52 M188 392 h136"/>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#5aa074"/>
+      <stop offset="1" stop-color="#2c7449"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0.5" cy="0.36" r="0.65">
+      <stop offset="0" stop-color="#9cc4a3" stop-opacity="0.45"/>
+      <stop offset="1" stop-color="#9cc4a3" stop-opacity="0"/>
+    </radialGradient>
+    <!-- hand-painted wobble for organic, brushy edges -->
+    <filter id="paint" x="-8%" y="-8%" width="116%" height="116%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.018" numOctaves="2" seed="7" result="n"/>
+      <feDisplacementMap in="SourceGraphic" in2="n" scale="6.5"
+        xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+    <!-- soft paper grain -->
+    <filter id="grain">
+      <feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="2" stitchTiles="stitch"/>
+      <feColorMatrix type="saturate" values="0"/>
+    </filter>
+  </defs>
+
+  <!-- painterly background -->
+  <rect width="512" height="512" fill="url(#bg)"/>
+  <rect width="512" height="512" fill="url(#glow)"/>
+
+  <!-- hand-drawn bowl + sprout, brushy cream lines -->
+  <g filter="url(#paint)" fill="none" stroke="#fbf7ec" stroke-width="16"
+     stroke-linecap="round" stroke-linejoin="round">
+    <!-- bowl -->
+    <path d="M150 300 h212 c0 64 -52 112 -106 112 s-106 -48 -106 -112 z"/>
+    <path d="M196 300 c4 -34 28 -56 60 -56 s56 22 60 56"/>
+    <path d="M126 300 h260"/>
+    <!-- sprout stem -->
+    <path d="M256 296 V168"/>
+    <!-- left leaf -->
+    <path d="M256 232 c-46 0 -80 -26 -86 -72 46 -6 82 22 86 72 z" fill="#fbf7ec" fill-opacity="0.16"/>
+    <!-- right leaf -->
+    <path d="M256 206 c34 0 62 -22 66 -60 -34 -4 -62 16 -66 60 z" fill="#fbf7ec" fill-opacity="0.16"/>
   </g>
+
+  <!-- clay seed accents for warmth -->
+  <g fill="#e0a484">
+    <circle cx="196" cy="150" r="9"/>
+    <circle cx="318" cy="176" r="8"/>
+    <circle cx="256" cy="120" r="7"/>
+  </g>
+
+  <!-- grain texture overlay -->
+  <rect width="512" height="512" filter="url(#grain)" opacity="0.07"/>
 </svg>
