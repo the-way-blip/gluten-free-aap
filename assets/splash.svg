@@ -8,7 +8,7 @@
   </defs>
   <rect width="512" height="512" fill="#faf7f0"/>
   <g transform="translate(256 256) scale(0.62) translate(-256 -256)">
-    <g filter="url(#paint)" fill="none" stroke="#2c7449" stroke-width="16"
+    <g filter="url(#paint)" fill="none" stroke="#c06a42" stroke-width="16"
        stroke-linecap="round" stroke-linejoin="round">
       <path d="M150 300 h212 c0 64 -52 112 -106 112 s-106 -48 -106 -112 z"/>
       <path d="M196 300 c4 -34 28 -56 60 -56 s56 22 60 56"/>
@@ -17,7 +17,7 @@
       <path d="M256 232 c-46 0 -80 -26 -86 -72 46 -6 82 22 86 72 z"/>
       <path d="M256 206 c34 0 62 -22 66 -60 -34 -4 -62 16 -66 60 z"/>
     </g>
-    <g fill="#d2825b">
+    <g fill="#738455">
       <circle cx="196" cy="150" r="9"/>
       <circle cx="318" cy="176" r="8"/>
       <circle cx="256" cy="120" r="7"/>
