@@ -121,6 +121,13 @@ export function SiftProvider({ children }: { children: React.ReactNode }) {
       setReady(true);
     };
     loadAll();
+    // One-time cleanup: the reaction/food journal feature was removed, so drop
+    // any orphaned data left in older installs.
+    try {
+      window.localStorage.removeItem("sift.reactions");
+    } catch {
+      /* ignore */
+    }
     // CloudSync dispatches this after pulling the user's data from the cloud,
     // so the UI reflects synced state without a page reload.
     window.addEventListener("sift:reload", loadAll);

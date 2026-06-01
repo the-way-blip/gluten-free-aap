@@ -47,5 +47,11 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<true/>
+	<key>NSCameraUsageDescription</key>
+	<string>Sift uses your camera to scan your pantry or fridge and detect gluten-free ingredients.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Sift lets you pick a photo of your pantry or fridge to detect ingredients.</string>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>Sift may save photos you capture while scanning your pantry.</string>
 </dict>
 </plist>

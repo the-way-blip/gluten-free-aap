@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef, useState } from "react";
+import { Capacitor } from "@capacitor/core";
 import type { PantryLocation } from "@/lib/types";
 
 /**
@@ -26,12 +27,12 @@ export function ScanPantry({
   const [mode, setMode] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
 
-  async function handleFile(file: File) {
+  // Shared pipeline: send a (downscaled) data URL to the vision endpoint.
+  async function scan(dataUrl: string) {
     setError(null);
     setDetected(null);
     setLoading(true);
     try {
-      const dataUrl = await resizeImage(file, 1024);
       setPreview(dataUrl);
       const res = await fetch("/api/scan-pantry", {
         method: "POST",
@@ -54,6 +55,39 @@ export function ScanPantry({
       setError("Something went wrong reading that image.");
     } finally {
       setLoading(false);
+    }
+  }
+
+  async function handleFile(file: File) {
+    try {
+      const dataUrl = await resizeImage(file, 1024);
+      await scan(dataUrl);
+    } catch {
+      setError("Something went wrong reading that image.");
+    }
+  }
+
+  // On native iOS/Android, use the real camera/photo picker; on web, fall back
+  // to the hidden file input. The native path is more reliable inside the app
+  // and gives a proper permission prompt.
+  async function takePhoto() {
+    if (!Capacitor.isNativePlatform()) {
+      inputRef.current?.click();
+      return;
+    }
+    try {
+      const { Camera, CameraResultType, CameraSource } = await import(
+        "@capacitor/camera"
+      );
+      const photo = await Camera.getPhoto({
+        quality: 70,
+        width: 1024,
+        resultType: CameraResultType.DataUrl,
+        source: CameraSource.Prompt,
+      });
+      if (photo.dataUrl) await scan(photo.dataUrl);
+    } catch {
+      // User cancelled the picker, or permission denied — stay quiet.
     }
   }
 
@@ -106,10 +140,7 @@ export function ScanPantry({
       />
 
       {!detected && !loading && (
-        <button
-          onClick={() => inputRef.current?.click()}
-          className="btn-primary w-full"
-        >
+        <button onClick={takePhoto} className="btn-primary w-full">
           📷 Take or upload a photo
         </button>
       )}
