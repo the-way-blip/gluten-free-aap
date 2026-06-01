@@ -42,6 +42,40 @@ export default function RestaurantsPage() {
   const [searchResult, setSearchResult] = useState<Restaurant | null>(null);
   const [loading, setLoading] = useState(false);
   const [mode, setMode] = useState<string | null>(null);
+  const [copiedSpots, setCopiedSpots] = useState(false);
+
+  // Build a shareable plain-text list of saved restaurants with each one's
+  // personalized grade and a top ordering tip — handy when traveling.
+  function buildSpotsText(): string {
+    const lines = ["📍 My gluten-free safe spots", ""];
+    for (const r of savedRestaurants) {
+      const g = gradeFor(r, profile);
+      lines.push(`${r.name} — grade ${g.letter}`);
+      if (r.orderingTips[0]) lines.push(`  Tip: ${r.orderingTips[0]}`);
+    }
+    lines.push("");
+    lines.push("Made with Sift");
+    return lines.join("\n").trim();
+  }
+
+  async function shareSpots() {
+    const text = buildSpotsText();
+    try {
+      if (typeof navigator !== "undefined" && navigator.share) {
+        await navigator.share({ title: "My gluten-free safe spots", text });
+        return;
+      }
+    } catch {
+      /* user dismissed — fall through to clipboard */
+    }
+    try {
+      await navigator.clipboard.writeText(text);
+      setCopiedSpots(true);
+      setTimeout(() => setCopiedSpots(false), 2000);
+    } catch {
+      /* clipboard blocked */
+    }
+  }
 
   // Sort seed restaurants best→worst for THIS user.
   const ranked = useMemo(() => {
@@ -113,9 +147,19 @@ export default function RestaurantsPage() {
                 </p>
               </div>
             ) : (
-              savedRestaurants.map((r) => (
-                <RestaurantCard key={r.id} restaurant={r} profile={profile} />
-              ))
+              <>
+                <div className="flex justify-end">
+                  <button
+                    onClick={shareSpots}
+                    className="text-sm font-medium text-leaf-600"
+                  >
+                    {copiedSpots ? "✓ Copied" : "📤 Share my safe spots"}
+                  </button>
+                </div>
+                {savedRestaurants.map((r) => (
+                  <RestaurantCard key={r.id} restaurant={r} profile={profile} />
+                ))}
+              </>
             )}
           </section>
         )}
