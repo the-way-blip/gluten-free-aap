@@ -10,9 +10,23 @@
 
 html,
 body {
-  /* Warm cream base with a soft hand-painted wash + subtle paper grain */
   background-color: #f7f1e6;
   color: #4a3f35;
+}
+
+/*
+ * Decorative warm wash + paper grain on a FIXED layer behind everything.
+ * Using a fixed pseudo-element (instead of `background-attachment: fixed` on
+ * body) keeps the look identical while avoiding an iOS WKWebView bug where
+ * `background-attachment: fixed` disables page scrolling.
+ */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background-color: #f7f1e6;
   background-image:
     radial-gradient(
       1100px 600px at 8% -8%,
@@ -25,7 +39,6 @@ body {
       transparent 55%
     ),
     url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180' viewBox='0 0 180 180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
-  background-attachment: fixed;
 }
 
 /* Headings get the soft artisanal serif */
