@@ -17,7 +17,7 @@ const PREMIUM_FEATURES = [
 export default function PricingPage() {
   return (
     <div>
-      <Header title="Sift Premium" subtitle="Eat gluten-free with confidence" />
+      <Header title="Sift Premium" subtitle="Eat gluten-free with ease" />
 
       <div className="space-y-6 px-5 pt-5">
         <div className="card flex flex-col items-center gap-2 p-6 text-center">

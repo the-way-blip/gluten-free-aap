@@ -59,8 +59,8 @@ export default function JournalPage() {
   return (
     <div>
       <Header
-        title="Reaction Journal"
-        subtitle="Track reactions to spot patterns"
+        title="Food Diary"
+        subtitle="Note meals & how you felt — spot your own patterns"
         right={
           <button
             onClick={() => setOpen(true)}
@@ -78,7 +78,7 @@ export default function JournalPage() {
               Possible patterns 🔎
             </h2>
             <p className="mt-1 text-sm text-gray-600">
-              Foods you've linked to reactions more than once:
+              Foods you've noted more than once:
             </p>
             <div className="mt-2 flex flex-wrap gap-2">
               {topFoods.map(([food, n]) => (
@@ -98,11 +98,11 @@ export default function JournalPage() {
             <Doodle name="leaf" className="h-14 w-14 text-clay-400" />
             <p className="font-semibold text-grain-900">No entries yet</p>
             <p className="px-8 text-sm text-gray-500">
-              If you have a reaction, log it here with what you suspect caused
-              it. Over time, Sift highlights repeat offenders.
+              If a meal doesn't sit right, jot it down with what you ate. Over
+              time, Sift surfaces foods worth a closer look.
             </p>
             <button onClick={() => setOpen(true)} className="btn-primary mt-2">
-              Log a reaction
+              Add an entry
             </button>
           </div>
         ) : (
@@ -210,7 +210,7 @@ function LogSheet({
         onClick={(e) => e.stopPropagation()}
       >
         <div className="mb-4 flex items-center justify-between">
-          <h3 className="font-bold text-grain-900">Log a reaction</h3>
+          <h3 className="font-bold text-grain-900">Add a diary entry</h3>
           <button onClick={onClose} className="text-gray-400">✕</button>
         </div>
 
@@ -240,7 +240,7 @@ function LogSheet({
         </div>
 
         <label className="mb-1 block text-sm font-medium text-grain-900">
-          Reaction to
+          Possibly from
         </label>
         <div className="mb-4 flex gap-2">
           {TRIGGERS.map((t) => (
@@ -258,7 +258,7 @@ function LogSheet({
           ))}
         </div>
 
-        <label className="mb-1 block text-sm font-medium text-grain-900">Symptoms</label>
+        <label className="mb-1 block text-sm font-medium text-grain-900">How you felt</label>
         <div className="mb-4 flex flex-wrap gap-2">
           {SYMPTOM_OPTIONS.map((s) => {
             const on = symptoms.has(s);

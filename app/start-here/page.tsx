@@ -37,7 +37,7 @@ export default function StartHerePage() {
             />
           </div>
           <p className="mt-2 text-sm text-gray-500">
-            A calm, step-by-step path for eating gluten-free with confidence.
+            A calm, step-by-step path for eating gluten-free with ease.
             Check things off as you go — your progress saves automatically.
           </p>
         </section>

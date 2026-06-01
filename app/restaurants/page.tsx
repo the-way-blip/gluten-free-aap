@@ -187,8 +187,9 @@ export default function RestaurantsPage() {
         </div>
 
         <p className="-mt-2 text-xs text-gray-400">
-          Grades adapt to you. A shared fryer drops a place if you avoid
-          cross-contamination, but not if you don't.
+          Grades are personalized estimates, not guarantees — menus and kitchen
+          practices vary by location, so always confirm with staff before
+          ordering.
         </p>
 
         {/* Segment filter: fast food vs sit-down, etc. */}

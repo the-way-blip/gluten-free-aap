@@ -7,7 +7,7 @@ import { CloudSync } from "@/components/CloudSync";
 import { CLERK_ENABLED } from "@/lib/cloud-config";
 
 export const metadata: Metadata = {
-  title: "Sift — Eat gluten-free with confidence",
+  title: "Sift — Eat gluten-free with ease",
   description:
     "Personalized gluten-free recipes, pantry-based meal ideas, smart shopping lists, and restaurant ordering guides tailored to how strict you need to be.",
   manifest: "/manifest.webmanifest",

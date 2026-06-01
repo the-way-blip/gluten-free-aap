@@ -74,7 +74,7 @@ export const STRICTNESS_LABELS: Record<Strictness, string> = {
 
 export const STRICTNESS_BLURBS: Record<Strictness, string> = {
   strict:
-    "No shared fryers, no shared surfaces, no “may contain” foods. Built for celiac-safe eating.",
+    "No shared fryers, no shared surfaces, no “may contain” foods. Built for the strictest gluten-free eating.",
   moderate:
     "Avoid clear gluten sources but a shared surface or trace warning won't necessarily rule something out.",
   relaxed:

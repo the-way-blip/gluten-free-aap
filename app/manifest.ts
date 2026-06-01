@@ -2,7 +2,7 @@ import type { MetadataRoute } from "next";
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: "Sift — Eat gluten-free with confidence",
+    name: "Sift — Eat gluten-free with ease",
     short_name: "Sift",
     description:
       "Personalized gluten-free recipes, pantry meal ideas, smart shopping lists, restaurant grades, and a label checker — tuned to how strict you need to be.",

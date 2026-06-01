@@ -139,15 +139,15 @@ export default function HomePage() {
             />
             <ActionCard
               href="/check"
-              title="Is it gluten-free?"
-              desc="Scan a label, barcode, or look it up"
+              title="Ingredient lookup"
+              desc="Check a label or look it up — then verify"
               accent="bg-purple-50 text-purple-700"
               emoji="🔍"
             />
             <ActionCard
               href="/journal"
-              title="Reaction journal"
-              desc="Track & spot patterns"
+              title="Food diary"
+              desc="Track meals & how you feel"
               accent="bg-pink-50 text-pink-700"
               emoji="📓"
             />
@@ -219,10 +219,10 @@ export default function HomePage() {
         )}
 
         <section className="card p-5">
-          <h3 className="font-semibold text-grain-900">Your safety profile</h3>
+          <h3 className="font-semibold text-grain-900">Your GF preferences</h3>
           <p className="mt-1 text-sm text-gray-600">
-            {summarizeProfile(profile)} This shapes your recipe filtering and
-            restaurant grades.
+            {summarizeProfile(profile)} This shapes your recipe suggestions and
+            restaurant guidance.
           </p>
           <Link
             href="/settings"
@@ -233,7 +233,8 @@ export default function HomePage() {
         </section>
 
         <div className="pt-2 text-center text-xs text-gray-400">
-          Sift is a prototype. Always confirm with restaurant staff and labels.
+          Sift offers gluten-free guidance, not medical advice. Always confirm
+          with current labels and restaurant staff.
         </div>
       </main>
     </div>

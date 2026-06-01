@@ -31,7 +31,7 @@ export default function CheckPage() {
 
   return (
     <div>
-      <Header title="Is it gluten-free?" subtitle="Check a product or look up an ingredient" />
+      <Header title="Ingredient lookup" subtitle="Check a product, then always verify the label" />
 
       <div className="px-5 pt-4">
         <div className="mb-4 flex gap-1 rounded-xl bg-grain-100 p-1">
