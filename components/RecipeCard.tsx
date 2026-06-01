@@ -3,6 +3,7 @@
 import { useState } from "react";
 import type { Recipe } from "@/lib/types";
 import { useSift } from "@/lib/store";
+import { scaleQuantity } from "@/lib/scale";
 
 export function RecipeCard({ recipe }: { recipe: Recipe }) {
   const [open, setOpen] = useState(false);
@@ -16,6 +17,11 @@ export function RecipeCard({ recipe }: { recipe: Recipe }) {
   } = useSift();
 
   const saved = isSaved(recipe.id);
+
+  // Servings scaler — defaults to the recipe's own serving count.
+  const baseServings = recipe.servings || 1;
+  const [servings, setServings] = useState(baseServings);
+  const factor = servings / baseServings;
 
   // Determine which ingredients the user is missing (not in pantry).
   const haveNames = new Set(pantry.map((p) => p.name.toLowerCase().trim()));
@@ -32,7 +38,7 @@ export function RecipeCard({ recipe }: { recipe: Recipe }) {
     addShoppingItems(
       missing.map((i) => ({
         name: i.name,
-        quantity: i.quantity,
+        quantity: scaleQuantity(i.quantity, factor),
         fromRecipe: recipe.title,
       }))
     );
@@ -90,9 +96,38 @@ export function RecipeCard({ recipe }: { recipe: Recipe }) {
             {recipe.glutenFreeNote}
           </div>
 
-          <h4 className="mb-2 mt-4 text-sm font-semibold text-grain-900">
-            Ingredients
-          </h4>
+          <div className="mb-2 mt-4 flex items-center justify-between">
+            <h4 className="text-sm font-semibold text-grain-900">Ingredients</h4>
+            <div className="flex items-center gap-2">
+              <span className="text-xs text-gray-400">Servings</span>
+              <div className="flex items-center gap-1 rounded-full border border-grain-200 bg-white">
+                <button
+                  onClick={() => setServings((s) => Math.max(1, s - 1))}
+                  disabled={servings <= 1}
+                  aria-label="Fewer servings"
+                  className="flex h-7 w-7 items-center justify-center rounded-full text-grain-600 disabled:opacity-30"
+                >
+                  −
+                </button>
+                <span className="min-w-[1.5rem] text-center text-sm font-semibold text-grain-900">
+                  {servings}
+                </span>
+                <button
+                  onClick={() => setServings((s) => Math.min(99, s + 1))}
+                  disabled={servings >= 99}
+                  aria-label="More servings"
+                  className="flex h-7 w-7 items-center justify-center rounded-full text-grain-600 disabled:opacity-30"
+                >
+                  +
+                </button>
+              </div>
+            </div>
+          </div>
+          {servings !== baseServings && (
+            <p className="mb-2 text-xs text-clay-600">
+              Scaled from {baseServings} → {servings} servings
+            </p>
+          )}
           <ul className="space-y-1.5 text-sm">
             {recipe.ingredients.map((ing, i) => {
               const has =
@@ -110,7 +145,9 @@ export function RecipeCard({ recipe }: { recipe: Recipe }) {
                     }`}
                   />
                   <span className="text-gray-700">{ing.name}</span>
-                  <span className="text-gray-400">— {ing.quantity}</span>
+                  <span className="text-gray-400">
+                    — {scaleQuantity(ing.quantity, factor)}
+                  </span>
                   {has && (
                     <span className="ml-auto text-xs text-leaf-600">
                       have it
