@@ -153,8 +153,8 @@ export default function OnboardingPage() {
       {step === 0 && (
         <Step
           eyebrow="Welcome to Sift"
-          title="Why are you eating gluten-free?"
-          desc="This sets how careful we'll be by default. You can fine-tune everything next."
+          title="How careful do you need to be?"
+          desc="This sets your starting point. You can fine-tune everything next."
         >
           <div className="space-y-3">
             {REASONS.map((r) => (

@@ -166,24 +166,26 @@ export default function RestaurantsPage() {
 
         {tab === "discover" && (
           <>
-        <div className="flex gap-2">
-          <input
-            value={query}
-            onChange={(e) => {
-              setQuery(e.target.value);
-              setSearchResult(null);
-            }}
-            onKeyDown={(e) => e.key === "Enter" && searchAnywhere()}
-            placeholder="Search a restaurant…"
-            className="flex-1 rounded-xl border border-grain-200 bg-white px-4 py-2.5 text-grain-900 outline-none focus:border-leaf-500"
-          />
-          <button
-            onClick={searchAnywhere}
-            disabled={loading || !query.trim()}
-            className="btn-primary"
-          >
-            {loading ? "…" : "Ask AI"}
-          </button>
+        <div className="sticky top-[5.25rem] z-20 -mx-5 border-b border-grain-200/40 bg-[#f7f1e6]/90 px-5 py-2.5 backdrop-blur">
+          <div className="flex gap-2">
+            <input
+              value={query}
+              onChange={(e) => {
+                setQuery(e.target.value);
+                setSearchResult(null);
+              }}
+              onKeyDown={(e) => e.key === "Enter" && searchAnywhere()}
+              placeholder="Search a restaurant…"
+              className="flex-1 rounded-xl border border-grain-200 bg-white px-4 py-2.5 text-grain-900 outline-none focus:border-leaf-500"
+            />
+            <button
+              onClick={searchAnywhere}
+              disabled={loading || !query.trim()}
+              className="btn-primary"
+            >
+              {loading ? "…" : "Ask AI"}
+            </button>
+          </div>
         </div>
 
         <p className="-mt-2 text-xs text-gray-400">

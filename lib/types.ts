@@ -185,8 +185,14 @@ export interface Restaurant {
   category: string; // "Fast food", "Burgers", "Mexican", etc.
   /** Base, "best case" grade assuming a relaxed eater. */
   baseGrade: Letter;
-  /** True if the chain has a dedicated GF fryer or no shared-fryer risk. */
+  /** True if there's no shared-fryer risk (a dedicated GF fryer OR no fryer). */
   dedicatedFryer: boolean;
+  /**
+   * Optional, more precise fryer status for accurate wording:
+   * "dedicated" = fries in a separate GF fryer; "none" = no deep fryer at all.
+   * Omit when it's a normal shared fryer.
+   */
+  fryer?: "dedicated" | "none";
   /** True if kitchen has documented cross-contamination protocols. */
   crossContaminationProtocol: boolean;
   hasGfMenu: boolean;

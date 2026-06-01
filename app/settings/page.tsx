@@ -114,7 +114,7 @@ export default function SettingsPage() {
 
         <section className="card p-4">
           <p className="text-xs font-semibold uppercase tracking-wide text-gray-400">
-            Eating gluten-free for
+            Your gluten-free approach
           </p>
           <p className="mt-1 font-semibold text-grain-900">
             {REASON_LABELS[profile.reason]}

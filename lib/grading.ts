@@ -38,11 +38,15 @@ export function gradeFor(
   const cc = profile.crossContamination;
 
   // Shared fryer risk
-  if (!restaurant.dedicatedFryer && !cc.sharedFryer) {
+  if (restaurant.fryer === "dedicated") {
+    reasons.push("Fries in a dedicated gluten-free fryer.");
+  } else if (restaurant.fryer === "none") {
+    reasons.push("No deep fryer here — no shared-fryer risk.");
+  } else if (!restaurant.dedicatedFryer && !cc.sharedFryer) {
     idx += 2;
-    reasons.push("No dedicated fryer — a real risk for you.");
+    reasons.push("Shared fryer here — a real risk for you.");
   } else if (restaurant.dedicatedFryer) {
-    reasons.push("Has a dedicated/no-shared fryer.");
+    reasons.push("No shared-fryer risk here.");
   } else if (cc.sharedFryer) {
     reasons.push("Shared fryer, which you're okay with.");
   }

@@ -49,21 +49,21 @@ export function defaultCrossContamination(
 }
 
 export const REASON_LABELS: Record<GFReason, string> = {
-  celiac: "Celiac disease",
-  autoimmune: "Autoimmune (e.g. Hashimoto's)",
-  sensitivity: "Gluten sensitivity",
-  health: "Health / dietary choice",
+  celiac: "I avoid gluten completely",
+  autoimmune: "I feel best avoiding it closely",
+  sensitivity: "I'm sensitive to gluten",
+  health: "I'm gluten-free by choice",
 };
 
 export const REASON_BLURBS: Record<GFReason, string> = {
   celiac:
-    "An autoimmune reaction where even trace gluten causes intestinal damage. Cross-contamination matters.",
+    "Even tiny traces are a problem for you, so cross-contamination really matters.",
   autoimmune:
-    "Many people with Hashimoto's and other autoimmune conditions feel better avoiding gluten closely.",
+    "You feel noticeably better keeping gluten well away, beyond just the obvious sources.",
   sensitivity:
-    "Non-celiac gluten sensitivity — real symptoms without the autoimmune damage. Comfort varies by person.",
+    "Gluten doesn't sit well with you, though small traces may vary day to day.",
   health:
-    "Cutting gluten for general wellness, energy, or diet. Trace amounts usually aren't a concern.",
+    "You're going gluten-free for how it makes you feel — trace amounts usually aren't a worry.",
 };
 
 export const STRICTNESS_LABELS: Record<Strictness, string> = {

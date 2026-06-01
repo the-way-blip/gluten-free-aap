@@ -20,6 +20,7 @@ export const SEED_RESTAURANTS: Restaurant[] = [
   {
     id: "innout",
     name: "In-N-Out",
+    fryer: "dedicated",
     domain: "in-n-out.com",
     segment: "fast-food",
     category: "Burgers",
@@ -44,6 +45,7 @@ export const SEED_RESTAURANTS: Restaurant[] = [
   {
     id: "fiveguys",
     name: "Five Guys",
+    fryer: "dedicated",
     domain: "fiveguys.com",
     segment: "fast-food",
     category: "Burgers",
@@ -92,6 +94,7 @@ export const SEED_RESTAURANTS: Restaurant[] = [
   {
     id: "shakeshack",
     name: "Shake Shack",
+    fryer: "dedicated",
     domain: "shakeshack.com",
     segment: "fast-food",
     category: "Burgers",
@@ -254,6 +257,7 @@ export const SEED_RESTAURANTS: Restaurant[] = [
   {
     id: "chickfila",
     name: "Chick-fil-A",
+    fryer: "dedicated",
     domain: "chick-fil-a.com",
     segment: "fast-food",
     category: "Chicken",
