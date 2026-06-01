@@ -27,8 +27,11 @@ const GRADE_FILTERS: { key: GradeFilter; label: string }[] = [
   { key: "A", label: "⭐ Best (A only)" },
 ];
 
+type Tab = "discover" | "saved";
+
 export default function RestaurantsPage() {
-  const { profile } = useSift();
+  const { profile, savedRestaurants } = useSift();
+  const [tab, setTab] = useState<Tab>("discover");
   const [query, setQuery] = useState("");
   const [segment, setSegment] = useState<RestaurantSegment | "all">("all");
   const [gradeFilter, setGradeFilter] = useState<GradeFilter>("all");
@@ -83,6 +86,38 @@ export default function RestaurantsPage() {
       />
 
       <div className="space-y-5 px-5 pt-4">
+        <div className="flex gap-1 rounded-xl bg-grain-100 p-1">
+          <TabBtn active={tab === "discover"} onClick={() => setTab("discover")}>
+            Discover
+          </TabBtn>
+          <TabBtn active={tab === "saved"} onClick={() => setTab("saved")}>
+            My safe spots ({savedRestaurants.length})
+          </TabBtn>
+        </div>
+
+        {tab === "saved" && (
+          <section className="space-y-3">
+            {savedRestaurants.length === 0 ? (
+              <div className="card flex flex-col items-center gap-2 py-12 text-center">
+                <span className="text-2xl">📍</span>
+                <p className="font-semibold text-grain-900">
+                  No safe spots saved yet
+                </p>
+                <p className="px-8 text-sm text-gray-500">
+                  Open any restaurant and tap “Save to my safe spots” to keep it
+                  here for quick reference.
+                </p>
+              </div>
+            ) : (
+              savedRestaurants.map((r) => (
+                <RestaurantCard key={r.id} restaurant={r} profile={profile} />
+              ))
+            )}
+          </section>
+        )}
+
+        {tab === "discover" && (
+          <>
         <div className="flex gap-2">
           <input
             value={query}
@@ -199,7 +234,30 @@ export default function RestaurantsPage() {
             </div>
           )}
         </section>
+          </>
+        )}
       </div>
     </div>
+  );
+}
+
+function TabBtn({
+  active,
+  onClick,
+  children,
+}: {
+  active: boolean;
+  onClick: () => void;
+  children: React.ReactNode;
+}) {
+  return (
+    <button
+      onClick={onClick}
+      className={`flex-1 rounded-lg py-2 text-sm font-semibold transition ${
+        active ? "bg-white text-grain-900 shadow-sm" : "text-gray-500"
+      }`}
+    >
+      {children}
+    </button>
   );
 }
