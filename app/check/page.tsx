@@ -3,6 +3,7 @@
 import { useMemo, useRef, useState } from "react";
 import { Header } from "@/components/Header";
 import { BarcodeScanner } from "@/components/BarcodeScanner";
+import { SkeletonCaption } from "@/components/Skeletons";
 import { useSift } from "@/lib/store";
 import {
   searchTerms,
@@ -130,9 +131,16 @@ function ProductChecker({ profile }: { profile: ReturnType<typeof useSift>["prof
       </div>
 
       {loading && (
-        <div className="flex items-center justify-center gap-2 py-4 text-sm text-gray-500">
-          <span className="h-4 w-4 animate-spin rounded-full border-2 border-grain-200 border-t-leaf-600" />
-          Analyzing…
+        <div className="space-y-3">
+          <SkeletonCaption>Analyzing ingredients…</SkeletonCaption>
+          <div className="card animate-pulse space-y-3 p-4">
+            <div className="flex items-center gap-2">
+              <div className="h-6 w-6 rounded-full bg-grain-100" />
+              <div className="h-4 w-28 rounded-full bg-grain-100" />
+            </div>
+            <div className="h-3 w-3/4 rounded-full bg-grain-50" />
+            <div className="h-3 w-2/3 rounded-full bg-grain-50" />
+          </div>
         </div>
       )}
 

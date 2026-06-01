@@ -3,6 +3,10 @@
 import { useMemo, useState } from "react";
 import { Header } from "@/components/Header";
 import { RestaurantCard } from "@/components/RestaurantCard";
+import {
+  RestaurantCardSkeleton,
+  SkeletonCaption,
+} from "@/components/Skeletons";
 import { useSift } from "@/lib/store";
 import { SEED_RESTAURANTS } from "@/lib/seed-restaurants";
 import { gradeFor } from "@/lib/grading";
@@ -177,8 +181,18 @@ export default function RestaurantsPage() {
           ))}
         </div>
 
+        {/* Skeleton while the AI ordering guide is being generated */}
+        {loading && (
+          <section className="space-y-3">
+            <SkeletonCaption>
+              Looking up a gluten-free ordering guide…
+            </SkeletonCaption>
+            <RestaurantCardSkeleton />
+          </section>
+        )}
+
         {/* AI search result for a place not in our DB */}
-        {searchResult && (
+        {!loading && searchResult && (
           <section className="space-y-2">
             <div className="flex items-center justify-between">
               <h2 className="text-sm font-semibold uppercase tracking-wide text-gray-400">

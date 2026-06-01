@@ -5,6 +5,7 @@ import { Header } from "@/components/Header";
 import { RecipeCard } from "@/components/RecipeCard";
 import { CuisinePicker } from "@/components/CuisinePicker";
 import { RecipeControls } from "@/components/RecipeControls";
+import { RecipeSkeletonList } from "@/components/Skeletons";
 import { ScanPantry } from "@/components/ScanPantry";
 import { Doodle } from "@/components/Doodle";
 import { COMMON_PANTRY } from "@/lib/common-foods";
@@ -207,6 +208,10 @@ export default function PantryPage() {
               : "Suggest meals from my pantry"}
           </button>
         </section>
+
+        {loading && recipes.length === 0 && (
+          <RecipeSkeletonList count={3} caption="Finding meals from your pantry…" />
+        )}
 
         {recipes.length > 0 && (
           <section className="space-y-3">

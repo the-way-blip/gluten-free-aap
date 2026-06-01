@@ -5,6 +5,7 @@ import { Header } from "@/components/Header";
 import { RecipeCard } from "@/components/RecipeCard";
 import { CuisinePicker } from "@/components/CuisinePicker";
 import { RecipeControls } from "@/components/RecipeControls";
+import { RecipeSkeletonList } from "@/components/Skeletons";
 import { Doodle } from "@/components/Doodle";
 import { useSift } from "@/lib/store";
 import { SEED_RECIPES } from "@/lib/seed-recipes";
@@ -125,6 +126,10 @@ export default function RecipesPage() {
             >
               {loading ? "Cooking up ideas…" : "✨ Generate fresh recipes"}
             </button>
+
+            {loading && generated.length === 0 && (
+              <RecipeSkeletonList count={3} caption="Cooking up ideas…" />
+            )}
 
             {generated.length > 0 && (
               <section className="space-y-3">
