@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { useSift } from "@/lib/store";
 import { RecipeCard } from "@/components/RecipeCard";
 import { RestaurantCard } from "@/components/RestaurantCard";
+import { InstallPrompt } from "@/components/InstallPrompt";
 import { summarizeProfile, STRICTNESS_LABELS } from "@/lib/profile";
 
 export default function HomePage() {
@@ -78,6 +79,8 @@ export default function HomePage() {
       </header>
 
       <main className="space-y-6 px-5 pt-6">
+        <InstallPrompt />
+
         {startTasks.length < 5 && (
           <Link
             href="/start-here"
