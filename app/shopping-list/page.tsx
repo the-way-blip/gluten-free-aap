@@ -25,12 +25,48 @@ export default function ShoppingListPage() {
   const [name, setName] = useState("");
   const [view, setView] = useState<View>("list");
   const [groupByStore, setGroupByStore] = useState(false);
+  const [copied, setCopied] = useState(false);
 
   function add() {
     const v = name.trim();
     if (!v) return;
     addShoppingItems([{ name: v }]);
     setName("");
+  }
+
+  // Build a plain-text version of the still-to-buy items, grouped the same way
+  // the list is currently grouped, so it pastes cleanly into Notes/Messages.
+  function buildListText(): string {
+    const lines = ["🛒 My gluten-free shopping list", ""];
+    for (const [group, items] of groups.entries()) {
+      lines.push(`${group}:`);
+      for (const item of items) {
+        lines.push(`  • ${item.name}${item.quantity ? ` (${item.quantity})` : ""}`);
+      }
+      lines.push("");
+    }
+    lines.push("Made with Sift");
+    return lines.join("\n").trim();
+  }
+
+  async function shareList() {
+    const text = buildListText();
+    // Prefer the native share sheet on mobile; fall back to clipboard.
+    try {
+      if (typeof navigator !== "undefined" && navigator.share) {
+        await navigator.share({ title: "My gluten-free shopping list", text });
+        return;
+      }
+    } catch {
+      /* user dismissed the share sheet — fall through to clipboard */
+    }
+    try {
+      await navigator.clipboard.writeText(text);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } catch {
+      /* clipboard blocked — nothing else to do */
+    }
   }
 
   const toBuy = shopping.filter((s) => !s.checked);
@@ -102,12 +138,22 @@ export default function ShoppingListPage() {
             </div>
 
             {shopping.length > 0 && (
-              <button
-                onClick={() => setGroupByStore((g) => !g)}
-                className="text-sm font-medium text-leaf-600"
-              >
-                {groupByStore ? "↩ Group by recipe" : "🏬 Group by store"}
-              </button>
+              <div className="flex items-center justify-between">
+                <button
+                  onClick={() => setGroupByStore((g) => !g)}
+                  className="text-sm font-medium text-leaf-600"
+                >
+                  {groupByStore ? "↩ Group by recipe" : "🏬 Group by store"}
+                </button>
+                {toBuy.length > 0 && (
+                  <button
+                    onClick={shareList}
+                    className="text-sm font-medium text-leaf-600"
+                  >
+                    {copied ? "✓ Copied" : "📤 Share list"}
+                  </button>
+                )}
+              </div>
             )}
 
             {shopping.length === 0 && (
