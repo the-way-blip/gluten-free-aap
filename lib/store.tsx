@@ -233,6 +233,17 @@ export function SiftProvider({ children }: { children: React.ReactNode }) {
     [saved]
   );
 
+  const markRecipeViewed = useCallback((r: Recipe) => {
+    setRecentRecipes((prev) => {
+      const next = [r, ...prev.filter((x) => x.id !== r.id)].slice(
+        0,
+        RECENT_MAX
+      );
+      save(KEYS.recent, next);
+      return next;
+    });
+  }, []);
+
   const addToPlan = useCallback((day: string, recipe: Recipe) => {
     setMealPlan((prev) => {
       const next = [...prev, { id: uid(), day, recipe }];
