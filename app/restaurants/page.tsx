@@ -19,10 +19,19 @@ const SEGMENTS: { key: RestaurantSegment | "all"; label: string }[] = [
   { key: "cafe", label: "Cafe" },
 ];
 
+// Quick grade filters so users can jump straight to places safe for them.
+type GradeFilter = "all" | "A" | "AB";
+const GRADE_FILTERS: { key: GradeFilter; label: string }[] = [
+  { key: "all", label: "Any grade" },
+  { key: "AB", label: "🟢 Safe (A & B)" },
+  { key: "A", label: "⭐ Best (A only)" },
+];
+
 export default function RestaurantsPage() {
   const { profile } = useSift();
   const [query, setQuery] = useState("");
   const [segment, setSegment] = useState<RestaurantSegment | "all">("all");
+  const [gradeFilter, setGradeFilter] = useState<GradeFilter>("all");
   const [searchResult, setSearchResult] = useState<Restaurant | null>(null);
   const [loading, setLoading] = useState(false);
   const [mode, setMode] = useState<string | null>(null);
@@ -35,10 +44,14 @@ export default function RestaurantsPage() {
     })).sort((a, b) => GRADE_ORDER[a.grade] - GRADE_ORDER[b.grade]);
   }, [profile]);
 
-  const filtered = ranked.filter(({ r }) => {
+  const filtered = ranked.filter(({ r, grade }) => {
     const matchesQuery = r.name.toLowerCase().includes(query.toLowerCase());
     const matchesSegment = segment === "all" || r.segment === segment;
-    return matchesQuery && matchesSegment;
+    const matchesGrade =
+      gradeFilter === "all" ||
+      (gradeFilter === "A" && grade === "A") ||
+      (gradeFilter === "AB" && (grade === "A" || grade === "B"));
+    return matchesQuery && matchesSegment && matchesGrade;
   });
 
   const hasLocalMatch = filtered.length > 0;
@@ -112,6 +125,23 @@ export default function RestaurantsPage() {
           ))}
         </div>
 
+        {/* Grade filter: jump straight to places safe for this profile */}
+        <div className="flex gap-2 overflow-x-auto pb-1">
+          {GRADE_FILTERS.map((g) => (
+            <button
+              key={g.key}
+              onClick={() => setGradeFilter(g.key)}
+              className={`shrink-0 rounded-full border px-3 py-1.5 text-sm font-medium transition ${
+                gradeFilter === g.key
+                  ? "border-clay-500 bg-clay-50 text-clay-700"
+                  : "border-grain-200 bg-white text-gray-600"
+              }`}
+            >
+              {g.label}
+            </button>
+          ))}
+        </div>
+
         {/* AI search result for a place not in our DB */}
         {searchResult && (
           <section className="space-y-2">
@@ -136,11 +166,26 @@ export default function RestaurantsPage() {
         {/* Local DB */}
         <section className="space-y-3">
           <h2 className="text-sm font-semibold uppercase tracking-wide text-gray-400">
-            {query && hasLocalMatch ? "Matches" : "Graded for you"}
+            {query && hasLocalMatch ? "Matches" : "Graded for you"} (
+            {filtered.length})
           </h2>
           {filtered.map(({ r }) => (
             <RestaurantCard key={r.id} restaurant={r} profile={profile} />
           ))}
+
+          {!query && !hasLocalMatch && (
+            <div className="card flex flex-col items-center gap-2 py-8 text-center">
+              <span className="text-2xl">🍽️</span>
+              <p className="font-semibold text-grain-900">
+                No places match this filter
+              </p>
+              <p className="px-8 text-sm text-gray-500">
+                {gradeFilter !== "all"
+                  ? "Try loosening the grade filter — with your cross-contamination settings, fewer chains make the cut."
+                  : "Try a different category."}
+              </p>
+            </div>
+          )}
 
           {query && !hasLocalMatch && !searchResult && (
             <div className="card flex flex-col items-center gap-2 py-8 text-center">
