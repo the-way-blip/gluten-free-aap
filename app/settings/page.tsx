@@ -95,6 +95,8 @@ export default function SettingsPage() {
         "sift.pantry",
         "sift.shopping",
         "sift.savedRecipes",
+        "sift.savedRestaurants",
+        "sift.recentRecipes",
         "sift.mealPlan",
         "sift.reactions",
       ].forEach((k) => window.localStorage.removeItem(k));

@@ -3,6 +3,7 @@
 import { useState } from "react";
 import type { GFProfile, MenuItem, Restaurant } from "@/lib/types";
 import { gradeFor, GRADE_LABELS } from "@/lib/grading";
+import { useSift } from "@/lib/store";
 import { GradeBadge } from "./GradeBadge";
 import { Logo } from "./Logo";
 
@@ -28,6 +29,8 @@ export function RestaurantCard({
 }) {
   const [open, setOpen] = useState(defaultOpen);
   const grade = gradeFor(restaurant, profile);
+  const { saveRestaurant, unsaveRestaurant, isRestaurantSaved } = useSift();
+  const saved = isRestaurantSaved(restaurant.id);
 
   return (
     <div className="card overflow-hidden">
@@ -59,6 +62,20 @@ export function RestaurantCard({
 
       {open && (
         <div className="border-t border-grain-100 px-4 pb-4 pt-3">
+          <button
+            onClick={() =>
+              saved
+                ? unsaveRestaurant(restaurant.id)
+                : saveRestaurant(restaurant)
+            }
+            className={`mb-3 flex w-full items-center justify-center gap-2 rounded-xl border py-2 text-sm font-semibold transition active:scale-[.99] ${
+              saved
+                ? "border-clay-300 bg-clay-50 text-clay-700"
+                : "border-grain-200 bg-white text-grain-700"
+            }`}
+          >
+            {saved ? "♥ Saved to my safe spots" : "♡ Save to my safe spots"}
+          </button>
           <p className="text-sm text-gray-600">{restaurant.summary}</p>
 
           {/* Why this grade for you */}

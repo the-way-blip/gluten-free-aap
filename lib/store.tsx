@@ -13,6 +13,7 @@ import type {
   PlannedMeal,
   ReactionEntry,
   Recipe,
+  Restaurant,
   ShoppingItem,
 } from "./types";
 
@@ -25,6 +26,7 @@ const KEYS = {
   reactions: "sift.reactions",
   startTasks: "sift.startTasks",
   recent: "sift.recentRecipes",
+  savedRestaurants: "sift.savedRestaurants",
 } as const;
 
 const RECENT_MAX = 8;
@@ -75,6 +77,12 @@ interface SiftState {
   unsaveRecipe: (id: string) => void;
   isSaved: (id: string) => boolean;
 
+  /** Favorited restaurants — the user's "safe spots". */
+  savedRestaurants: Restaurant[];
+  saveRestaurant: (r: Restaurant) => void;
+  unsaveRestaurant: (id: string) => void;
+  isRestaurantSaved: (id: string) => boolean;
+
   /** Most-recently-opened recipes, newest first (capped). */
   recentRecipes: Recipe[];
   markRecipeViewed: (r: Recipe) => void;
@@ -105,6 +113,7 @@ export function SiftProvider({ children }: { children: React.ReactNode }) {
   const [reactions, setReactions] = useState<ReactionEntry[]>([]);
   const [startTasks, setStartTasks] = useState<string[]>([]);
   const [recentRecipes, setRecentRecipes] = useState<Recipe[]>([]);
+  const [savedRestaurants, setSavedRestaurants] = useState<Restaurant[]>([]);
 
   useEffect(() => {
     const loadAll = () => {
@@ -116,6 +125,7 @@ export function SiftProvider({ children }: { children: React.ReactNode }) {
       setReactions(load<ReactionEntry[]>(KEYS.reactions, []));
       setStartTasks(load<string[]>(KEYS.startTasks, []));
       setRecentRecipes(load<Recipe[]>(KEYS.recent, []));
+      setSavedRestaurants(load<Restaurant[]>(KEYS.savedRestaurants, []));
       setReady(true);
     };
     loadAll();
@@ -233,6 +243,28 @@ export function SiftProvider({ children }: { children: React.ReactNode }) {
     [saved]
   );
 
+  const saveRestaurant = useCallback((r: Restaurant) => {
+    setSavedRestaurants((prev) => {
+      if (prev.some((x) => x.id === r.id)) return prev;
+      const next = [r, ...prev];
+      save(KEYS.savedRestaurants, next);
+      return next;
+    });
+  }, []);
+
+  const unsaveRestaurant = useCallback((id: string) => {
+    setSavedRestaurants((prev) => {
+      const next = prev.filter((x) => x.id !== id);
+      save(KEYS.savedRestaurants, next);
+      return next;
+    });
+  }, []);
+
+  const isRestaurantSaved = useCallback(
+    (id: string) => savedRestaurants.some((x) => x.id === id),
+    [savedRestaurants]
+  );
+
   const markRecipeViewed = useCallback((r: Recipe) => {
     setRecentRecipes((prev) => {
       const next = [r, ...prev.filter((x) => x.id !== r.id)].slice(
@@ -315,6 +347,10 @@ export function SiftProvider({ children }: { children: React.ReactNode }) {
     saveRecipe,
     unsaveRecipe,
     isSaved,
+    savedRestaurants,
+    saveRestaurant,
+    unsaveRestaurant,
+    isRestaurantSaved,
     recentRecipes,
     markRecipeViewed,
     mealPlan,

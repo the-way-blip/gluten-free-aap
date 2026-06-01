@@ -5,6 +5,7 @@ import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useSift } from "@/lib/store";
 import { RecipeCard } from "@/components/RecipeCard";
+import { RestaurantCard } from "@/components/RestaurantCard";
 import { summarizeProfile, STRICTNESS_LABELS } from "@/lib/profile";
 
 export default function HomePage() {
@@ -16,6 +17,7 @@ export default function HomePage() {
     saved,
     startTasks,
     recentRecipes,
+    savedRestaurants,
   } = useSift();
   const router = useRouter();
 
@@ -190,6 +192,25 @@ export default function HomePage() {
             </h2>
             {recentRecipes.slice(0, 3).map((r) => (
               <RecipeCard key={`recent-${r.id}`} recipe={r} />
+            ))}
+          </section>
+        )}
+
+        {savedRestaurants.length > 0 && (
+          <section className="space-y-3">
+            <div className="flex items-center justify-between">
+              <h2 className="text-sm font-semibold uppercase tracking-wide text-gray-400">
+                📍 My safe spots
+              </h2>
+              <Link
+                href="/restaurants"
+                className="text-sm font-semibold text-leaf-600"
+              >
+                See all
+              </Link>
+            </div>
+            {savedRestaurants.slice(0, 3).map((r) => (
+              <RestaurantCard key={r.id} restaurant={r} profile={profile} />
             ))}
           </section>
         )}
