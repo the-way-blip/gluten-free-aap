@@ -57,7 +57,7 @@ export default function TermsPage() {
 
         <Section title="8. Changes & contact">
           We may update these Terms; continued use means acceptance. Questions?
-          Contact dillon@branddesignco.com.
+          Contact dillon@bigrapids.church.
         </Section>
 
         <p className="text-xs text-gray-400">

@@ -52,7 +52,7 @@ export default function PrivacyPage() {
         </Section>
 
         <Section title="Contact">
-          Privacy questions: dillon@branddesignco.com.
+          Privacy questions: dillon@bigrapids.church.
         </Section>
 
         <p className="text-xs text-gray-400">
