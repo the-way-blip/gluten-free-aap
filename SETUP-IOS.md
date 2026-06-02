@@ -28,7 +28,7 @@ npm run ios:open     # 🧑 opens the project in Xcode to build/run
 1. Enroll at developer.apple.com — **$99/year**.
 2. In **App Store Connect**, create a new app record:
    - Bundle ID: must match `appId` in `capacitor.config.ts`
-     (`com.branddesignco.sift` — change both if you want a different one)
+     (`com.getsift.app` — change both if you want a different one)
    - Name, category (Food & Drink), etc.
 
 ## D. App icons & splash 🤖

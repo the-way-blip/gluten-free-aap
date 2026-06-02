@@ -13,7 +13,7 @@ import type { CapacitorConfig } from "@capacitor/cli";
  * it identical in App Store Connect.
  */
 const config: CapacitorConfig = {
-  appId: "com.branddesignco.sift",
+  appId: "com.getsift.app",
   appName: "Sift",
   webDir: "ios-www",
   server: {
