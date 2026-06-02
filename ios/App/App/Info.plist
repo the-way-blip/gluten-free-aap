@@ -2,12 +2,12 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-    <key>CAPACITOR_DEBUG</key>
+	<key>CAPACITOR_DEBUG</key>
 	<string>$(CAPACITOR_DEBUG)</string>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleDisplayName</key>
-        <string>Sift</string>
+	<string>Sift</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -22,8 +22,16 @@
 	<string>$(MARKETING_VERSION)</string>
 	<key>CFBundleVersion</key>
 	<string>$(CURRENT_PROJECT_VERSION)</string>
+	<key>ITSAppUsesNonExemptEncryption</key>
+	<false/>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>NSCameraUsageDescription</key>
+	<string>Sift uses your camera to scan your pantry or fridge and detect gluten-free ingredients.</string>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>Sift may save photos you capture while scanning your pantry.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Sift lets you pick a photo of your pantry or fridge to detect ingredients.</string>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>
@@ -47,11 +55,5 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<true/>
-	<key>NSCameraUsageDescription</key>
-	<string>Sift uses your camera to scan your pantry or fridge and detect gluten-free ingredients.</string>
-	<key>NSPhotoLibraryUsageDescription</key>
-	<string>Sift lets you pick a photo of your pantry or fridge to detect ingredients.</string>
-	<key>NSPhotoLibraryAddUsageDescription</key>
-	<string>Sift may save photos you capture while scanning your pantry.</string>
 </dict>
 </plist>
