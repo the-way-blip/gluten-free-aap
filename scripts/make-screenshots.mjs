@@ -58,7 +58,7 @@ function wrapTspans(text, maxChars, x, startY, lineH) {
 }
 
 async function brand(rawPath, caption, outPath) {
-  const W = 1290, H = 2796;
+  const W = 1284, H = 2778; // App Store 6.7" (also accepted in the 6.5"/6.7" slot)
   const shotW = 1040;
   const shot = await sharp(rawPath).resize(shotW).toBuffer();
   const meta = await sharp(shot).metadata();
