@@ -1,6 +1,8 @@
 "use client";
 
+import { useEffect } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { Header } from "@/components/Header";
 import { Doodle } from "@/components/Doodle";
 import { BILLING_ENABLED, PRICING, TRIAL_DAYS } from "@/lib/subscription";
@@ -15,6 +17,16 @@ const PREMIUM_FEATURES = [
 ];
 
 export default function PricingPage() {
+  const router = useRouter();
+
+  // Premium isn't available yet (no billing configured). Don't show a pricing
+  // page that looks like a purchasable paywall — send people back home.
+  useEffect(() => {
+    if (!BILLING_ENABLED) router.replace("/");
+  }, [router]);
+
+  if (!BILLING_ENABLED) return null;
+
   return (
     <div>
       <Header title="Sift Premium" subtitle="Eat gluten-free with ease" />

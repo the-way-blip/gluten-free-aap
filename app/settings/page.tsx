@@ -19,6 +19,7 @@ import {
   CARNIVORE_BLURBS,
 } from "@/lib/carnivore";
 import { COMMON_ALLERGENS } from "@/lib/common-foods";
+import { BILLING_ENABLED } from "@/lib/subscription";
 import type {
   CarnivoreLevel,
   CrossContaminationPrefs,
@@ -362,7 +363,10 @@ export default function SettingsPage() {
             About
           </h2>
           <div className="card divide-y divide-grain-100">
-            <FooterLink href="/pricing" label="✨ Sift Premium" />
+            {BILLING_ENABLED && (
+              <FooterLink href="/pricing" label="✨ Sift Premium" />
+            )}
+            <FooterLink href="/support" label="Help & support" />
             <FooterLink href="/legal/disclaimer" label="Medical disclaimer" />
             <FooterLink href="/legal/terms" label="Terms of Service" />
             <FooterLink href="/legal/privacy" label="Privacy Policy" />
