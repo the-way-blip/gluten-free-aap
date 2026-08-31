@@ -5,6 +5,16 @@ import type { Recipe } from "@/lib/types";
 import { useSift } from "@/lib/store";
 import { scaleQuantity } from "@/lib/scale";
 
+const SHARE_URL = "https://sift-self.vercel.app/download?utm_source=share&utm_medium=recipe";
+
+function shareText(recipe: Recipe): string {
+  const swaps =
+    recipe.swaps && recipe.swaps.length
+      ? `\nSift swapped: ${recipe.swaps.map((s) => `${s.original} → ${s.replacement}`).join("; ")}`
+      : "";
+  return `${recipe.title} — gluten-free 🌱${swaps}\n\nI use Sift to make any recipe gluten-free. Get it free:`;
+}
+
 export function RecipeCard({ recipe }: { recipe: Recipe }) {
   const [open, setOpen] = useState(false);
   const {
@@ -34,6 +44,22 @@ export function RecipeCard({ recipe }: { recipe: Recipe }) {
   });
 
   const [added, setAdded] = useState(false);
+  const [shared, setShared] = useState(false);
+
+  async function share() {
+    const text = shareText(recipe);
+    try {
+      if (navigator.share) {
+        await navigator.share({ title: recipe.title, text, url: SHARE_URL });
+      } else {
+        await navigator.clipboard.writeText(`${text} ${SHARE_URL}`);
+      }
+      setShared(true);
+      setTimeout(() => setShared(false), 2000);
+    } catch {
+      /* user cancelled */
+    }
+  }
   function addMissing() {
     addShoppingItems(
       missing.map((i) => ({
@@ -211,6 +237,9 @@ export function RecipeCard({ recipe }: { recipe: Recipe }) {
               className={saved ? "btn-secondary flex-1" : "btn-primary flex-1"}
             >
               {saved ? "★ Saved" : "☆ Save"}
+            </button>
+            <button onClick={share} aria-label="Share recipe" className="btn-secondary px-3">
+              {shared ? "✓" : "↗"}
             </button>
             <button
               onClick={addMissing}

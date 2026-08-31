@@ -8,6 +8,7 @@ import { CLERK_ENABLED } from "@/lib/cloud-config";
 import { PremiumProvider } from "@/components/PremiumProvider";
 import { PaywallModal } from "@/components/PaywallModal";
 import { PremiumBar } from "@/components/PremiumBar";
+import { NotificationScheduler } from "@/components/NotificationScheduler";
 import { MetaPixel } from "@/components/MetaPixel";
 import { DeepLinks } from "@/components/DeepLinks";
 
@@ -59,6 +60,7 @@ export default function RootLayout({
             </div>
             <Nav />
             <PremiumBar />
+            <NotificationScheduler />
             <PaywallModal />
           </PremiumProvider>
         </SiftProvider>

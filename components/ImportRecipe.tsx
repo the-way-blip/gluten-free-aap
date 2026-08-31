@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { Capacitor, CapacitorHttp } from "@capacitor/core";
 import { extractFromHtml } from "@/lib/import-source";
 import { usePremium } from "@/components/PremiumProvider";
+import { TRIAL_DAYS } from "@/lib/subscription";
 import { RecipeCard } from "@/components/RecipeCard";
 import { useSift } from "@/lib/store";
 import type { ImportResult } from "@/lib/types";
@@ -26,7 +27,23 @@ export function ImportRecipe({
   defaultOpen?: boolean;
 }) {
   const { profile } = useSift();
-  const { requirePremium } = usePremium();
+  const { billingActive, premium, requirePremium } = usePremium();
+
+  // Everyone gets ONE import free — people need to feel the magic before the
+  // paywall makes sense. Tracked locally; after it succeeds, imports gate.
+  const FREE_KEY = "sift.freeImportUsed";
+  const freeImportUsed = () => {
+    try {
+      return window.localStorage.getItem(FREE_KEY) === "1";
+    } catch {
+      return false;
+    }
+  };
+  const gateImport = () => {
+    if (!billingActive || premium) return true; // web / already premium
+    if (!freeImportUsed()) return true; // first one's on us
+    return requirePremium("recipe import");
+  };
   const [open, setOpen] = useState(defaultOpen || !!initialUrl);
   const [mode, setMode] = useState<Mode>("link");
   const [link, setLink] = useState(initialUrl ?? "");
@@ -46,7 +63,7 @@ export function ImportRecipe({
     sourceUrl?: string;
     sourceName?: string;
   }) {
-    if (!requirePremium("recipe import")) return;
+    if (!gateImport()) return;
     setLoading(true);
     setError(null);
     setResult(null);
@@ -71,6 +88,11 @@ export function ImportRecipe({
         return;
       }
       setResult(data as ImportResult);
+      try {
+        window.localStorage.setItem(FREE_KEY, "1");
+      } catch {
+        /* ignore */
+      }
     } catch {
       setError("Couldn't reach Sift. Check your connection and try again.");
     } finally {
@@ -132,7 +154,7 @@ export function ImportRecipe({
   }
 
   async function takePhoto() {
-    if (!requirePremium("recipe import")) return;
+    if (!gateImport()) return;
     if (!Capacitor.isNativePlatform()) {
       inputRef.current?.click();
       return;
@@ -175,7 +197,12 @@ export function ImportRecipe({
           📥
         </div>
         <div className="flex-1">
-          <div className="font-semibold text-grain-900">Import a recipe</div>
+          <div className="flex items-center gap-2">
+            <span className="font-semibold text-grain-900">Import a recipe</span>
+            {billingActive && !premium && !freeImportUsed() && (
+              <span className="chip bg-leaf-50 text-leaf-700">1 free</span>
+            )}
+          </div>
           <div className="text-xs text-gray-500">
             Paste a link from Instagram, TikTok, or any site — Sift makes it gluten-free
           </div>
@@ -320,6 +347,14 @@ export function ImportRecipe({
 
               {result.verdict !== "not_convertible" && <RecipeCard recipe={result.recipe} />}
 
+              {billingActive && !premium && (
+                <button
+                  onClick={() => requirePremium("unlimited recipe imports")}
+                  className="btn-primary w-full"
+                >
+                  ✨ Loved it? Unlimited imports — free for {TRIAL_DAYS} days
+                </button>
+              )}
               <div className="flex items-center justify-between text-xs text-gray-400">
                 <span>
                   {result.sourceName ? `From ${result.sourceName}` : "From pasted text"}
