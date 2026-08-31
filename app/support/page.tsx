@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Header } from "@/components/Header";
+import { AppStoreBadge } from "@/components/AppStoreBadge";
 
 export const metadata = { title: "Support — Sift" };
 
@@ -48,6 +49,16 @@ export default function SupportPage() {
           <p className="mt-2 text-xs text-leaf-700">
             We aim to reply within a couple of business days.
           </p>
+        </section>
+
+        <section className="card flex flex-col items-center gap-3 p-5 text-center">
+          <h2 className="font-display text-lg font-semibold text-grain-900">
+            Get Sift on your iPhone
+          </h2>
+          <p className="text-sm text-gray-600">
+            Download the native app free from the App Store.
+          </p>
+          <AppStoreBadge height={48} />
         </section>
 
         <section>

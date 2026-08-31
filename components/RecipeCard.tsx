@@ -62,6 +62,11 @@ export function RecipeCard({ recipe }: { recipe: Recipe }) {
             {recipe.source === "ai" && (
               <span className="chip bg-leaf-50 text-leaf-700">AI</span>
             )}
+            {recipe.source === "imported" && (
+              <span className="chip bg-clay-100 text-clay-700">
+                {recipe.importVerdict === "adapted" ? "🔁 Made GF" : "📥 Imported"}
+              </span>
+            )}
             {recipe.difficulty && (
               <span className="chip bg-clay-100 capitalize text-clay-700">
                 {recipe.difficulty}
@@ -95,6 +100,34 @@ export function RecipeCard({ recipe }: { recipe: Recipe }) {
             <span className="font-semibold">Why it's safe: </span>
             {recipe.glutenFreeNote}
           </div>
+
+          {recipe.source === "imported" && (recipe.swaps?.length || recipe.sourceUrl) && (
+            <div className="mt-2 rounded-xl bg-grain-50 p-3 text-xs text-grain-700">
+              {recipe.swaps && recipe.swaps.length > 0 && (
+                <ul className="space-y-1">
+                  {recipe.swaps.map((sw, i) => (
+                    <li key={i}>
+                      <span className="line-through opacity-60">{sw.original}</span>{" "}
+                      <span className="text-gray-400">→</span>{" "}
+                      <span className="font-semibold text-leaf-800">{sw.replacement}</span>
+                    </li>
+                  ))}
+                </ul>
+              )}
+              {recipe.sourceUrl && (
+                <a
+                  href={recipe.sourceUrl}
+                  target="_blank"
+                  rel="noreferrer"
+                  className={`block font-semibold text-clay-700 underline ${
+                    recipe.swaps?.length ? "mt-2" : ""
+                  }`}
+                >
+                  View original{recipe.sourceName ? ` on ${recipe.sourceName}` : ""} ↗
+                </a>
+              )}
+            </div>
+          )}
 
           <div className="mb-2 mt-4 flex items-center justify-between">
             <h4 className="text-sm font-semibold text-grain-900">Ingredients</h4>

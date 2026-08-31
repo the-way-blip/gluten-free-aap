@@ -2,6 +2,7 @@
 
 import { useRef, useState } from "react";
 import { Capacitor } from "@capacitor/core";
+import { usePremium } from "@/components/PremiumProvider";
 import type { PantryLocation } from "@/lib/types";
 
 /**
@@ -19,6 +20,7 @@ export function ScanPantry({
   location: PantryLocation;
   onAdd: (names: string[], location: PantryLocation) => void;
 }) {
+  const { requirePremium } = usePremium();
   const inputRef = useRef<HTMLInputElement>(null);
   const [loading, setLoading] = useState(false);
   const [preview, setPreview] = useState<string | null>(null);
@@ -71,6 +73,7 @@ export function ScanPantry({
   // to the hidden file input. The native path is more reliable inside the app
   // and gives a proper permission prompt.
   async function takePhoto() {
+    if (!requirePremium("pantry photo scan")) return;
     if (!Capacitor.isNativePlatform()) {
       inputRef.current?.click();
       return;

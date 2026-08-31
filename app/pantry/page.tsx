@@ -10,6 +10,7 @@ import { ScanPantry } from "@/components/ScanPantry";
 import { Doodle } from "@/components/Doodle";
 import { COMMON_PANTRY } from "@/lib/common-foods";
 import { useSift } from "@/lib/store";
+import { usePremium } from "@/components/PremiumProvider";
 import type { Cuisine, PantryLocation, Recipe, RecipeFilters } from "@/lib/types";
 
 const LOCATIONS: { key: PantryLocation; label: string; emoji: string }[] = [
@@ -20,6 +21,7 @@ const LOCATIONS: { key: PantryLocation; label: string; emoji: string }[] = [
 
 export default function PantryPage() {
   const { pantry, addPantryItem, removePantryItem, profile } = useSift();
+  const { requirePremium } = usePremium();
   const [name, setName] = useState("");
   const [location, setLocation] = useState<PantryLocation>("fridge");
 
@@ -48,6 +50,7 @@ export default function PantryPage() {
   }
 
   async function suggest() {
+    if (!requirePremium("pantry meal ideas")) return;
     setLoading(true);
     setMode(null);
     try {

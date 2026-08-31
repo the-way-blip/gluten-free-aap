@@ -5,6 +5,10 @@ import { SiftProvider } from "@/lib/store";
 import { Nav } from "@/components/Nav";
 import { CloudSync } from "@/components/CloudSync";
 import { CLERK_ENABLED } from "@/lib/cloud-config";
+import { PremiumProvider } from "@/components/PremiumProvider";
+import { PaywallModal } from "@/components/PaywallModal";
+import { MetaPixel } from "@/components/MetaPixel";
+import { DeepLinks } from "@/components/DeepLinks";
 
 export const metadata: Metadata = {
   title: "Sift — Eat gluten-free with ease",
@@ -44,12 +48,17 @@ export default function RootLayout({
         />
       </head>
       <body className="font-sans antialiased">
+        <MetaPixel />
+        <DeepLinks />
         <SiftProvider>
-          {CLERK_ENABLED && <CloudSync />}
-          <div className="mx-auto min-h-screen max-w-md pb-24 shadow-xl sm:my-0 sm:min-h-screen">
-            {children}
-          </div>
-          <Nav />
+          <PremiumProvider>
+            {CLERK_ENABLED && <CloudSync />}
+            <div className="mx-auto min-h-screen max-w-md pb-24 shadow-xl sm:my-0 sm:min-h-screen">
+              {children}
+            </div>
+            <Nav />
+            <PaywallModal />
+          </PremiumProvider>
         </SiftProvider>
       </body>
     </html>

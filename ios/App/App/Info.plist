@@ -22,10 +22,42 @@
 	<string>$(MARKETING_VERSION)</string>
 	<key>CFBundleVersion</key>
 	<string>$(CURRENT_PROJECT_VERSION)</string>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleURLName</key>
+			<string>com.glutenfreemadeeasy.app</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>sift</string>
+			</array>
+		</dict>
+	</array>
+	<key>FacebookAppID</key>
+	<string>1745212116598148</string>
+	<key>FacebookClientToken</key>
+	<string>cc8014d69460e7870e40beed6fe07c5e</string>
+	<key>FacebookDisplayName</key>
+	<string>Sift</string>
+	<key>FacebookAutoLogAppEventsEnabled</key>
+	<true/>
+	<key>SKAdNetworkItems</key>
+	<array>
+		<dict>
+			<key>SKAdNetworkIdentifier</key>
+			<string>v9wttpbfk9.skadnetwork</string>
+		</dict>
+		<dict>
+			<key>SKAdNetworkIdentifier</key>
+			<string>n38lu8286q.skadnetwork</string>
+		</dict>
+	</array>
 	<key>ITSAppUsesNonExemptEncryption</key>
 	<false/>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>NSUserTrackingUsageDescription</key>
+	<string>This lets us measure which ads bring people to Sift so we can keep the app affordable. Your recipes and profile are never shared.</string>
 	<key>NSCameraUsageDescription</key>
 	<string>Sift uses your camera to scan your pantry or fridge and detect gluten-free ingredients.</string>
 	<key>NSPhotoLibraryAddUsageDescription</key>

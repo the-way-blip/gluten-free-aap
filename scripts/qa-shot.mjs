@@ -1,0 +1,14 @@
+import { chromium } from 'playwright';
+const b = await chromium.launch();
+const p = await b.newPage({ viewport:{width:390,height:844}, deviceScaleFactor:2, isMobile:true });
+await p.goto('https://sift-self.vercel.app/recipes?import=1',{waitUntil:'networkidle', timeout:60000});
+await p.waitForTimeout(1500);
+await p.screenshot({path:'/tmp/ui-import.png'});
+await p.fill('input[inputmode="url"]','https://www.budgetbytes.com/one-pot-creamy-cajun-chicken-pasta/');
+await p.click('text=Check & make it gluten-free');
+await p.waitForSelector('text=What Sift swapped', {timeout: 90000}).catch(e=>console.log('no result:',e.message));
+await p.waitForTimeout(500);
+await p.screenshot({path:'/tmp/ui-result.png', fullPage:true});
+await p.goto('https://sift-self.vercel.app/',{waitUntil:'networkidle'});
+await p.screenshot({path:'/tmp/ui-home.png', fullPage:true});
+await b.close(); console.log('ok');

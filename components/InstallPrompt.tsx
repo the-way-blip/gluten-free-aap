@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { AppStoreBadge } from "./AppStoreBadge";
 
 /**
  * A gentle, dismissible "Add Sift to your home screen" hint.
@@ -89,13 +90,20 @@ export function InstallPrompt() {
     <div className="card flex items-start gap-3 border-leaf-200 bg-leaf-50 p-4">
       <span className="text-2xl">📲</span>
       <div className="flex-1">
-        <div className="font-semibold text-leaf-800">Add Sift to your phone</div>
+        <div className="font-semibold text-leaf-800">Get the Sift app</div>
         {isIOS ? (
-          <p className="mt-0.5 text-xs text-leaf-700">
-            Tap the Share button, then{" "}
-            <span className="font-semibold">“Add to Home Screen”</span> — Sift
-            opens full-screen like a real app, even offline-friendly.
-          </p>
+          <>
+            <p className="mt-0.5 text-xs text-leaf-700">
+              Sift is on the App Store — download the native app for the best
+              experience.
+            </p>
+            <AppStoreBadge className="mt-2" height={40} />
+            <p className="mt-2 text-[11px] text-leaf-600">
+              Prefer not to? Tap Share →{" "}
+              <span className="font-semibold">“Add to Home Screen”</span> to use
+              it like an app right here.
+            </p>
+          </>
         ) : (
           <p className="mt-0.5 text-xs text-leaf-700">
             Install it for one-tap access and a full-screen, app-like

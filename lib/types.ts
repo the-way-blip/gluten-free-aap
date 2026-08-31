@@ -131,8 +131,49 @@ export interface Recipe {
   dairyFree?: boolean;
   /** True if the recipe is carnivore-friendly (animal products only). */
   carnivore?: boolean;
-  /** "ai" = generated this session, "seed" = bundled sample. */
-  source: "ai" | "seed";
+  /** "ai" = generated this session, "seed" = bundled sample, "imported" = pulled from a link/text/photo. */
+  source: "ai" | "seed" | "imported";
+  /** For imported recipes: where it came from. */
+  sourceUrl?: string;
+  sourceName?: string;
+  /** For imported recipes: what Sift changed to make it gluten-free. */
+  swaps?: RecipeSwap[];
+  importVerdict?: ImportVerdict;
+}
+
+// ---- Recipe import (link / text / photo → gluten-free) ----
+
+/**
+ * "gluten_free"     = the original was already safe at the user's strictness.
+ * "adapted"         = Sift swapped ingredients/steps to make it safe.
+ * "not_convertible" = gluten is structural (e.g. seitan, real sourdough) and
+ *                     there is no honest swap — Sift explains why.
+ */
+export type ImportVerdict = "gluten_free" | "adapted" | "not_convertible";
+
+export interface RecipeSwap {
+  /** The original ingredient or step text. */
+  original: string;
+  /** What Sift replaced it with. */
+  replacement: string;
+  /** Plain-language reason, tuned to the user's strictness. */
+  why: string;
+}
+
+export interface ImportResult {
+  verdict: ImportVerdict;
+  /** One line for the banner, e.g. "Already gluten-free" / "Made gluten-free with 3 swaps". */
+  summary: string;
+  /** Ingredients in the original that contain or may contain gluten. */
+  flagged: string[];
+  swaps: RecipeSwap[];
+  /** The recipe as Sift would cook it (converted when needed). */
+  recipe: Recipe;
+  originalTitle: string;
+  sourceUrl?: string;
+  sourceName?: string;
+  mode: "ai" | "error";
+  error?: string;
 }
 
 // ---- Meal plan ----

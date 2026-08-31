@@ -1,0 +1,22 @@
+{
+  "name": "sift-iap",
+  "version": "1.0.0",
+  "description": "Sift StoreKit 2 in-app purchases — local Capacitor plugin (no third-party service).",
+  "main": "dist/index.js",
+  "module": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "type": "module",
+  "capacitor": {
+    "ios": {
+      "src": "ios"
+    }
+  },
+  "files": [
+    "dist/",
+    "ios/Sources",
+    "Package.swift"
+  ],
+  "peerDependencies": {
+    "@capacitor/core": ">=6.0.0"
+  }
+}

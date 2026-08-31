@@ -8,6 +8,7 @@ import {
   SkeletonCaption,
 } from "@/components/Skeletons";
 import { useSift } from "@/lib/store";
+import { usePremium } from "@/components/PremiumProvider";
 import { SEED_RESTAURANTS } from "@/lib/seed-restaurants";
 import { gradeFor } from "@/lib/grading";
 import type { Restaurant, RestaurantSegment } from "@/lib/types";
@@ -35,6 +36,7 @@ type Tab = "discover" | "saved";
 
 export default function RestaurantsPage() {
   const { profile, savedRestaurants } = useSift();
+  const { requirePremium } = usePremium();
   const [tab, setTab] = useState<Tab>("discover");
   const [query, setQuery] = useState("");
   const [segment, setSegment] = useState<RestaurantSegment | "all">("all");
@@ -99,6 +101,7 @@ export default function RestaurantsPage() {
 
   async function searchAnywhere() {
     if (!query.trim()) return;
+    if (!requirePremium("AI restaurant ordering guides")) return;
     setLoading(true);
     setSearchResult(null);
     setMode(null);

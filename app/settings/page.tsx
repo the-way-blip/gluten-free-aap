@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Header } from "@/components/Header";
 import { AccountSection } from "@/components/AccountSection";
+import { RedeemCode } from "@/components/RedeemCode";
 import { useSift } from "@/lib/store";
 import {
   REASON_LABELS,
@@ -112,6 +113,7 @@ export default function SettingsPage() {
 
       <div className="space-y-6 px-5 pt-4">
         <AccountSection />
+        <RedeemCode />
 
         <section className="card p-4">
           <p className="text-xs font-semibold uppercase tracking-wide text-gray-400">

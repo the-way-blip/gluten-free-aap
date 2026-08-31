@@ -7,6 +7,7 @@ import { useSift } from "@/lib/store";
 import { RecipeCard } from "@/components/RecipeCard";
 import { RestaurantCard } from "@/components/RestaurantCard";
 import { InstallPrompt } from "@/components/InstallPrompt";
+import { TrialBanner } from "@/components/TrialBanner";
 import { summarizeProfile, STRICTNESS_LABELS } from "@/lib/profile";
 
 export default function HomePage() {
@@ -79,6 +80,7 @@ export default function HomePage() {
       </header>
 
       <main className="space-y-6 px-5 pt-6">
+        <TrialBanner />
         <InstallPrompt />
 
         {startTasks.length < 5 && (
@@ -117,6 +119,13 @@ export default function HomePage() {
               emoji="📖"
             />
             <ActionCard
+              href="/recipes?import=1"
+              title="Import a recipe"
+              desc="Any link → gluten-free"
+              accent="bg-clay-100 text-clay-700"
+              emoji="📥"
+            />
+            <ActionCard
               href="/restaurants"
               title="Eating out"
               desc="Graded for you"
@@ -150,7 +159,6 @@ export default function HomePage() {
               desc="Guides & getting started"
               accent="bg-amber-50 text-amber-700"
               emoji="📚"
-              wide
             />
           </div>
         </section>

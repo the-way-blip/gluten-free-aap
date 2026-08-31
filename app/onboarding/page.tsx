@@ -1,8 +1,11 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useSift } from "@/lib/store";
+import { usePremium } from "@/components/PremiumProvider";
+import { Paywall } from "@/components/Paywall";
+import { trackPixel } from "@/components/MetaPixel";
 import {
   defaultCrossContamination,
   defaultStrictnessFor,
@@ -53,8 +56,12 @@ const CC_QUESTIONS: {
 export default function OnboardingPage() {
   const router = useRouter();
   const { setProfile, profile } = useSift();
+  const { billingActive, premium } = usePremium();
 
   const [step, setStep] = useState(0);
+  // After the profile is saved, native users who aren't premium see the trial
+  // offer once — the "aha" moment is fresh and the ask is a free 7 days.
+  const [offer, setOffer] = useState(false);
   const [reason, setReason] = useState<GFReason | null>(
     profile?.reason ?? null
   );
@@ -115,7 +122,37 @@ export default function OnboardingPage() {
         .filter(Boolean),
       createdAt: Date.now(),
     });
+    if (billingActive && !premium) {
+      trackPixel("ViewContent");
+      setOffer(true);
+      return;
+    }
     router.replace("/");
+  }
+
+  // Purchase completed from the offer screen → straight in.
+  useEffect(() => {
+    if (offer && premium) router.replace("/");
+  }, [offer, premium, router]);
+
+  if (offer) {
+    return (
+      <div className="flex min-h-screen flex-col px-5 pb-10 pt-12">
+        <p className="mb-1 text-center text-xs font-semibold uppercase tracking-wide text-leaf-600">
+          You're all set
+        </p>
+        <h1 className="font-display mb-4 text-center text-2xl font-semibold text-grain-900">
+          Try everything free for 7 days
+        </h1>
+        <Paywall feature="Everything in Sift" />
+        <button
+          onClick={() => router.replace("/")}
+          className="mt-4 py-3 text-center text-sm font-semibold text-gray-500"
+        >
+          Continue with the free version
+        </button>
+      </div>
+    );
   }
 
   return (

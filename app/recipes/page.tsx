@@ -1,13 +1,15 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Header } from "@/components/Header";
 import { RecipeCard } from "@/components/RecipeCard";
+import { ImportRecipe } from "@/components/ImportRecipe";
 import { CuisinePicker } from "@/components/CuisinePicker";
 import { RecipeControls } from "@/components/RecipeControls";
 import { RecipeSkeletonList } from "@/components/Skeletons";
 import { Doodle } from "@/components/Doodle";
 import { useSift } from "@/lib/store";
+import { usePremium } from "@/components/PremiumProvider";
 import { SEED_RECIPES } from "@/lib/seed-recipes";
 import { isCarnivore } from "@/lib/carnivore";
 import { looksDairyFree as recipeLooksDairyFree } from "@/lib/recipe-fallback";
@@ -17,6 +19,7 @@ type Tab = "discover" | "saved";
 
 export default function RecipesPage() {
   const { profile, saved } = useSift();
+  const { requirePremium } = usePremium();
   const [tab, setTab] = useState<Tab>("discover");
   const [cuisine, setCuisine] = useState<Cuisine>("any");
   const [filters, setFilters] = useState<RecipeFilters>({});
@@ -24,8 +27,20 @@ export default function RecipesPage() {
   const [generated, setGenerated] = useState<Recipe[]>([]);
   const [loading, setLoading] = useState(false);
   const [mode, setMode] = useState<string | null>(null);
+  // `?import=<url>` (from the iOS share sheet / Home tile) opens the importer.
+  const [importUrl, setImportUrl] = useState<string | undefined>();
+  const [importOpen, setImportOpen] = useState(false);
+  useEffect(() => {
+    const v = new URLSearchParams(window.location.search).get("import");
+    if (v === null) return;
+    setImportOpen(true);
+    if (/^https?:\/\//i.test(v)) setImportUrl(v);
+    // Clean the URL so a refresh doesn't re-import.
+    window.history.replaceState({}, "", window.location.pathname);
+  }, []);
 
   async function generate() {
+    if (!requirePremium("AI recipe generation")) return;
     setLoading(true);
     setMode(null);
     try {
@@ -99,6 +114,7 @@ export default function RecipesPage() {
 
         {tab === "discover" && (
           <div className="space-y-4">
+            <ImportRecipe initialUrl={importUrl} defaultOpen={importOpen} />
             <div className="relative">
               <input
                 value={query}

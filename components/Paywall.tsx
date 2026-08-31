@@ -1,30 +1,68 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
 import { Doodle } from "@/components/Doodle";
 import { PRICING, TRIAL_DAYS } from "@/lib/subscription";
+import { usePremium } from "@/components/PremiumProvider";
 
 /**
- * The locked-state screen shown when a user's free trial has ended and they
- * don't have an active subscription. Dormant until billing is enabled (Stage
- * B wires this into the access gate). Presentational only.
+ * The locked-state screen shown (inside the native iOS app) when a user without
+ * an active subscription reaches a Premium feature. Drives real StoreKit
+ * purchases via usePremium(); on the web it shows the plan info with the
+ * "free while in early access" note (billing there is off).
  */
 export function Paywall({
   feature = "this feature",
-  trialEnded = true,
+  trialEnded = false,
 }: {
-  /** What the user was trying to reach, e.g. "AI recipe generation". */
   feature?: string;
-  /** True if shown because the trial lapsed (vs. a hard premium gate). */
   trialEnded?: boolean;
 }) {
+  const { billingActive, products, purchase, restore } = usePremium();
+  const [busy, setBusy] = useState<string | null>(null);
+  const [note, setNote] = useState<string | null>(null);
+
   const PERKS = [
+    "Import any recipe (links, TikTok, Instagram) — made gluten-free",
     "Unlimited AI recipe generation",
     "Pantry photo scan & meal ideas",
     "Ingredient & label lookup",
     "Personalized restaurant guidance",
-    "Sync across all your devices",
+    "Save recipes & safe spots",
   ];
+
+  // Prefer live App Store products; fall back to the static pricing on web.
+  const monthly = products.find((p) => p.id === "sift_premium_monthly");
+  const yearly = products.find((p) => p.id === "sift_premium_yearly");
+
+  async function buy(productId: string) {
+    setNote(null);
+    setBusy(productId);
+    try {
+      const result = await purchase(productId);
+      if (result.status === "cancelled") setNote(null);
+      else if (result.status === "pending")
+        setNote("Your purchase is pending approval.");
+      else if (!result.premium && result.status !== "purchased")
+        setNote("Couldn't complete the purchase. Please try again.");
+    } catch {
+      setNote("Something went wrong. Please try again.");
+    } finally {
+      setBusy(null);
+    }
+  }
+
+  async function onRestore() {
+    setNote(null);
+    setBusy("restore");
+    try {
+      const ok = await restore();
+      if (!ok) setNote("No previous purchase found on this Apple ID.");
+    } finally {
+      setBusy(null);
+    }
+  }
 
   return (
     <div className="flex min-h-[70vh] flex-col items-center justify-center px-6 text-center">
@@ -34,12 +72,12 @@ export function Paywall({
         </div>
 
         <h2 className="font-display text-xl font-semibold text-grain-900">
-          {trialEnded ? "Your free trial has ended" : "A Premium feature"}
+          {trialEnded ? "Your free trial has ended" : "Unlock Sift Premium"}
         </h2>
         <p className="mt-1 text-sm text-gray-500">
           {trialEnded
-            ? `Keep using ${feature} and everything else in Sift with Premium.`
-            : `${feature} is part of Sift Premium.`}
+            ? `Keep using ${feature} and everything else in Sift.`
+            : `${feature} is part of Sift Premium — free for your first ${TRIAL_DAYS} days.`}
         </p>
 
         <ul className="mt-4 space-y-2 text-left">
@@ -56,24 +94,71 @@ export function Paywall({
           ))}
         </ul>
 
-        <div className="mt-5 rounded-xl bg-grain-50 p-3 text-sm text-grain-700">
-          <span className="font-semibold text-grain-900">
-            {PRICING.monthly.amount}
-          </span>
-          {PRICING.monthly.period} ·{" "}
-          <span className="font-semibold text-grain-900">
-            {PRICING.yearly.amount}
-          </span>
-          {PRICING.yearly.period}{" "}
-          <span className="text-clay-600">({PRICING.yearly.note})</span>
-        </div>
-
-        <Link href="/pricing" className="btn-primary mt-4 block">
-          See Premium
-        </Link>
-        <p className="mt-3 text-xs text-gray-400">
-          {TRIAL_DAYS}-day free trial · cancel anytime
-        </p>
+        {billingActive ? (
+          <div className="mt-5 space-y-2">
+            <button
+              disabled={busy !== null}
+              onClick={() => buy("sift_premium_yearly")}
+              className="btn-primary block w-full disabled:opacity-60"
+            >
+              {busy === "sift_premium_yearly"
+                ? "Starting…"
+                : yearly
+                  ? `Start free trial — then ${yearly.displayPrice}/yr`
+                  : `Start ${TRIAL_DAYS}-day free trial (Yearly)`}
+            </button>
+            <button
+              disabled={busy !== null}
+              onClick={() => buy("sift_premium_monthly")}
+              className="btn-secondary block w-full disabled:opacity-60"
+            >
+              {busy === "sift_premium_monthly"
+                ? "Starting…"
+                : monthly
+                  ? `Monthly — ${monthly.displayPrice}/mo`
+                  : "Monthly plan"}
+            </button>
+            <button
+              disabled={busy !== null}
+              onClick={onRestore}
+              className="mt-1 text-xs text-gray-500 underline disabled:opacity-60"
+            >
+              {busy === "restore" ? "Restoring…" : "Restore purchases"}
+            </button>
+            {note && <p className="text-xs text-clay-600">{note}</p>}
+            <p className="pt-1 text-[11px] leading-relaxed text-gray-400">
+              {TRIAL_DAYS}-day free trial, then auto-renews until cancelled.
+              Cancel anytime in Settings. Payment is charged to your Apple ID.
+            </p>
+            <p className="pt-1 text-[11px] text-gray-400">
+              <Link href="/legal/terms" className="underline">
+                Terms of Use (EULA)
+              </Link>{" "}
+              ·{" "}
+              <Link href="/legal/privacy" className="underline">
+                Privacy Policy
+              </Link>
+            </p>
+          </div>
+        ) : (
+          <>
+            <div className="mt-5 rounded-xl bg-grain-50 p-3 text-sm text-grain-700">
+              <span className="font-semibold text-grain-900">
+                {PRICING.monthly.amount}
+              </span>
+              {PRICING.monthly.period} ·{" "}
+              <span className="font-semibold text-grain-900">
+                {PRICING.yearly.amount}
+              </span>
+              {PRICING.yearly.period}{" "}
+              <span className="text-clay-600">({PRICING.yearly.note})</span>
+            </div>
+            <div className="mt-3 rounded-xl border border-leaf-200 bg-leaf-50 p-3 text-xs text-leaf-800">
+              🌱 Sift is free while in early access — enjoy everything, no card
+              required.
+            </div>
+          </>
+        )}
       </div>
     </div>
   );

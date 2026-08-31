@@ -10,11 +10,32 @@
  * wired in the access gate once Clerk Billing is enabled in the dashboard.
  */
 
-/** Slug of the paid plan, as created in the Clerk dashboard (Billing → Plans). */
+/** Slug of the paid plan / entitlement. */
 export const PREMIUM_PLAN = "premium";
 
-/** Length of the free trial, in days, from account creation. */
+/**
+ * App Store Connect product IDs (auto-renewable subscriptions), in display
+ * order. These are permanent and must match ASC + the native StoreKit plugin.
+ */
+export const PRODUCT_IDS = [
+  "sift_premium_monthly",
+  "sift_premium_yearly",
+] as const;
+
+export type ProductId = (typeof PRODUCT_IDS)[number];
+
+/** Length of the free trial, in days (the App Store intro offer). */
 export const TRIAL_DAYS = 7;
+
+/**
+ * Comp code — unlocks Premium permanently on a device, bypassing the store.
+ * For gifting free lifetime access (friends, press, giveaways). Apple's own
+ * offer codes can't do "lifetime," so this is handled in-app. Anyone with the
+ * code gets Premium, so share it deliberately.
+ */
+export const COMP_CODE = "SIFT-VIP-LIFETIME";
+/** localStorage key that marks this device as comped. */
+export const COMP_KEY = "sift.comp";
 
 /** Pricing shown on the marketing/pricing page. Source of truth is Stripe. */
 export const PRICING = {

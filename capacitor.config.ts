@@ -9,11 +9,12 @@ import type { CapacitorConfig } from "@capacitor/cli";
  * submission, add native camera + push so the app clears Apple's "minimum
  * functionality" review (Guideline 4.2).
  *
- * Change `appId` to your own reverse-DNS identifier before building, and keep
- * it identical in App Store Connect.
+ * `appId` MUST match the shipped app's bundle identifier in App Store Connect
+ * (Apple app id 6775724538). The Xcode project's PRODUCT_BUNDLE_IDENTIFIER is
+ * the source of truth for the signed build; keep this value identical to it.
  */
 const config: CapacitorConfig = {
-  appId: "com.getsift.app",
+  appId: "com.glutenfreemadeeasy.app",
   appName: "Sift",
   webDir: "ios-www",
   server: {

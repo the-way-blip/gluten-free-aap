@@ -5,6 +5,7 @@ import { Header } from "@/components/Header";
 import { BarcodeScanner } from "@/components/BarcodeScanner";
 import { SkeletonCaption } from "@/components/Skeletons";
 import { useSift } from "@/lib/store";
+import { usePremium } from "@/components/PremiumProvider";
 import {
   searchTerms,
   STATUS_META,
@@ -55,6 +56,7 @@ export default function CheckPage() {
 }
 
 function ProductChecker({ profile }: { profile: ReturnType<typeof useSift>["profile"] }) {
+  const { requirePremium } = usePremium();
   const inputRef = useRef<HTMLInputElement>(null);
   const [text, setText] = useState("");
   const [loading, setLoading] = useState(false);
@@ -63,6 +65,7 @@ function ProductChecker({ profile }: { profile: ReturnType<typeof useSift>["prof
   const [preview, setPreview] = useState<string | null>(null);
 
   async function run(payload: { image?: string; text?: string }) {
+    if (!requirePremium("ingredient & label lookup")) return;
     setLoading(true);
     setResult(null);
     try {
