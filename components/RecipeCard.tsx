@@ -5,6 +5,7 @@ import type { Recipe } from "@/lib/types";
 import { useSift } from "@/lib/store";
 import { scaleQuantity } from "@/lib/scale";
 import { maybeAskReview } from "@/lib/review";
+import { trackGA } from "@/components/GoogleAnalytics";
 
 const SHARE_URL = "https://sift-self.vercel.app/download?utm_source=share&utm_medium=recipe";
 
@@ -55,6 +56,7 @@ export function RecipeCard({ recipe }: { recipe: Recipe }) {
       } else {
         await navigator.clipboard.writeText(`${text} ${SHARE_URL}`);
       }
+      trackGA("recipe_shared", { source: recipe.source });
       setShared(true);
       setTimeout(() => setShared(false), 2000);
     } catch {
@@ -239,6 +241,7 @@ export function RecipeCard({ recipe }: { recipe: Recipe }) {
                   unsaveRecipe(recipe.id);
                 } else {
                   saveRecipe(recipe);
+                  trackGA("recipe_saved", { source: recipe.source });
                   void maybeAskReview();
                 }
               }}

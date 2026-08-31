@@ -7,6 +7,7 @@ import { usePremium } from "@/components/PremiumProvider";
 import { RecipeCard } from "@/components/RecipeCard";
 import { RecipeSkeletonList } from "@/components/Skeletons";
 import { trackPixel } from "@/components/MetaPixel";
+import { trackGA } from "@/components/GoogleAnalytics";
 import {
   defaultCrossContamination,
   defaultStrictnessFor,
@@ -126,6 +127,7 @@ export default function OnboardingPage() {
       createdAt: Date.now(),
     };
     setProfile(built);
+    trackGA("onboarding_complete", { strictness: built.strictness, reason: built.reason });
     if (billingActive && !premium) {
       trackPixel("ViewContent");
       setOffer(true);

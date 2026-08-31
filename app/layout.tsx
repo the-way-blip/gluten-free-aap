@@ -10,6 +10,7 @@ import { PaywallModal } from "@/components/PaywallModal";
 import { PremiumBar } from "@/components/PremiumBar";
 import { NotificationScheduler } from "@/components/NotificationScheduler";
 import { MetaPixel } from "@/components/MetaPixel";
+import { GoogleAnalytics } from "@/components/GoogleAnalytics";
 import { DeepLinks } from "@/components/DeepLinks";
 
 export const metadata: Metadata = {
@@ -51,6 +52,7 @@ export default function RootLayout({
       </head>
       <body className="font-sans antialiased">
         <MetaPixel />
+        <GoogleAnalytics />
         <DeepLinks />
         <SiftProvider>
           <PremiumProvider>

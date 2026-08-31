@@ -21,6 +21,7 @@ import {
 import type { PurchaseResult } from "@/lib/iap";
 import { COMP_CODE, COMP_KEY } from "@/lib/subscription";
 import { trackPixel } from "@/components/MetaPixel";
+import { trackGA } from "@/components/GoogleAnalytics";
 
 interface PremiumContextValue {
   /** True when the user has an active subscription, free trial, or comp code. */
@@ -151,6 +152,10 @@ export function PremiumProvider({ children }: { children: React.ReactNode }) {
             content_name: productId,
             ...(p?.price != null ? { value: p.price, currency: "USD" } : {}),
           });
+          trackGA("trial_started", {
+            product_id: productId,
+            ...(p?.price != null ? { value: p.price, currency: "USD" } : {}),
+          });
         }
       } else {
         await refresh();
@@ -170,6 +175,7 @@ export function PremiumProvider({ children }: { children: React.ReactNode }) {
     (feature: string) => {
       if (isPremium) return true;
       setPaywallFeature(feature);
+      trackGA("paywall_viewed", { feature });
       return false;
     },
     [isPremium],
