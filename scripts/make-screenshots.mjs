@@ -5,7 +5,7 @@ import { chromium } from "playwright";
 import sharp from "sharp";
 import fs from "fs";
 
-const BASE = "http://localhost:3000";
+const BASE = process.env.BASE || "http://localhost:3000";
 const ROOT = "/Users/dillonmccurdy1/Desktop/Claude Code/sift/screenshots";
 fs.mkdirSync(`${ROOT}/raw`, { recursive: true });
 
@@ -26,9 +26,20 @@ const shopping = [
 ];
 
 const shots = [
-  { name: "1-home", url: "/", caption: "Your whole gluten-free kitchen, in one calm place." },
   {
-    name: "2-recipes", url: "/recipes", caption: "Scale any recipe to how many you're feeding.",
+    name: "1-import",
+    url: "/recipes?import=" + encodeURIComponent("https://www.budgetbytes.com/one-pot-creamy-cajun-chicken-pasta/"),
+    caption: "Paste any recipe — Sift makes it gluten-free.",
+    setup: async (page) => {
+      // Wait for the live import to finish and show the swaps.
+      await page.waitForSelector("text=What Sift swapped", { timeout: 90000 }).catch(() => {});
+      await page.waitForTimeout(600);
+      await page.evaluate(() => window.scrollTo(0, 130));
+    },
+  },
+  { name: "2-home", url: "/", caption: "Your whole gluten-free kitchen, in one calm place." },
+  {
+    name: "3-recipes", url: "/recipes", caption: "Scale any recipe to how many you're feeding.",
     setup: async (page) => {
       await page.locator(".card button").first().click().catch(() => {});
       await page.waitForTimeout(500);
@@ -38,9 +49,9 @@ const shots = [
       await page.evaluate(() => window.scrollTo(0, 260));
     },
   },
-  { name: "3-dining", url: "/restaurants", caption: "Know where you can safely eat — graded for you." },
-  { name: "4-list", url: "/shopping-list", caption: "A smart list you can share and take with you." },
-  { name: "5-check", url: "/check", caption: "Check a label in seconds — then verify with confidence." },
+  { name: "4-dining", url: "/restaurants", caption: "Know where you can safely eat — graded for you." },
+  { name: "5-list", url: "/shopping-list", caption: "A smart list you can share and take with you." },
+  { name: "6-check", url: "/check", caption: "Check a label in seconds — then verify with confidence." },
 ];
 
 function wrapTspans(text, maxChars, x, startY, lineH) {

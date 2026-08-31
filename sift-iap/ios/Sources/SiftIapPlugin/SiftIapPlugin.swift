@@ -23,10 +23,23 @@ public class SiftIapPlugin: CAPPlugin, CAPBridgedPlugin {
         CAPPluginMethod(name: "getProducts", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "purchase", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "restore", returnType: CAPPluginReturnPromise),
-        CAPPluginMethod(name: "getEntitlement", returnType: CAPPluginReturnPromise)
+        CAPPluginMethod(name: "getEntitlement", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "requestReview", returnType: CAPPluginReturnPromise)
     ]
 
     private let productIds: Set<String> = ["sift_premium_monthly", "sift_premium_yearly"]
+
+    /// Ask iOS to show the native App Store rating prompt. The system decides
+    /// whether it actually appears (max ~3x/year), so callers can fire freely
+    /// at "win" moments.
+    @objc func requestReview(_ call: CAPPluginCall) {
+        DispatchQueue.main.async { [weak self] in
+            if let scene = self?.bridge?.webView?.window?.windowScene {
+                SKStoreReviewController.requestReview(in: scene)
+            }
+            call.resolve()
+        }
+    }
     private var updatesTask: Task<Void, Never>?
 
     public override func load() {

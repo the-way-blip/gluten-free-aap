@@ -12,6 +12,7 @@ export const SiftIap = registerPlugin('SiftIap', {
     purchase: async () => ({ status: 'unavailable', premium: false }),
     restore: async () => ({ premium: false }),
     getEntitlement: async () => ({ premium: false }),
+    requestReview: async () => ({}),
     addListener: async () => ({ remove: async () => {} }),
   }),
 });

@@ -4,7 +4,8 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useSift } from "@/lib/store";
 import { usePremium } from "@/components/PremiumProvider";
-import { Paywall } from "@/components/Paywall";
+import { RecipeCard } from "@/components/RecipeCard";
+import { RecipeSkeletonList } from "@/components/Skeletons";
 import { trackPixel } from "@/components/MetaPixel";
 import {
   defaultCrossContamination,
@@ -19,6 +20,7 @@ import type {
   CrossContaminationPrefs,
   GFReason,
   Strictness,
+  Recipe,
 } from "@/lib/types";
 
 const REASONS: GFReason[] = ["celiac", "autoimmune", "sensitivity", "health"];
@@ -56,12 +58,13 @@ const CC_QUESTIONS: {
 export default function OnboardingPage() {
   const router = useRouter();
   const { setProfile, profile } = useSift();
-  const { billingActive, premium } = usePremium();
+  const { billingActive, premium, requirePremium } = usePremium();
 
   const [step, setStep] = useState(0);
   // After the profile is saved, native users who aren't premium see the trial
   // offer once — the "aha" moment is fresh and the ask is a free 7 days.
   const [offer, setOffer] = useState(false);
+  const [tasteRecipes, setTasteRecipes] = useState<Recipe[] | null>(null);
   const [reason, setReason] = useState<GFReason | null>(
     profile?.reason ?? null
   );
@@ -109,22 +112,33 @@ export default function OnboardingPage() {
 
   function finish() {
     if (!reason || !strictness) return;
-    setProfile({
+    const built = {
       reason,
       strictness,
       crossContamination: cc,
       dairyFree,
       carnivore,
-      carnivoreLevel: carnivore ? "strict" : undefined,
+      carnivoreLevel: carnivore ? ("strict" as const) : undefined,
       otherAvoidances: avoidInput
         .split(",")
         .map((s) => s.trim())
         .filter(Boolean),
       createdAt: Date.now(),
-    });
+    };
+    setProfile(built);
     if (billingActive && !premium) {
       trackPixel("ViewContent");
       setOffer(true);
+      // Free taste: generate 3 recipes matched to their brand-new profile so
+      // the trial ask lands right after they see what Sift can do for THEM.
+      void fetch("/api/generate-recipes", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ pantry: [], cuisine: "any", profile: built, count: 3 }),
+      })
+        .then((r) => r.json())
+        .then((d) => setTasteRecipes(d.recipes ?? []))
+        .catch(() => setTasteRecipes([]));
       return;
     }
     router.replace("/");
@@ -141,13 +155,28 @@ export default function OnboardingPage() {
         <p className="mb-1 text-center text-xs font-semibold uppercase tracking-wide text-leaf-600">
           You're all set
         </p>
-        <h1 className="font-display mb-4 text-center text-2xl font-semibold text-grain-900">
-          Try everything free for 7 days
+        <h1 className="font-display mb-1 text-center text-2xl font-semibold text-grain-900">
+          Made for your profile, on the house
         </h1>
-        <Paywall feature="Everything in Sift" />
+        <p className="mb-4 text-center text-sm text-gray-500">
+          Three recipes that already fit exactly how careful you need to be.
+        </p>
+        <div className="space-y-3">
+          {tasteRecipes === null ? (
+            <RecipeSkeletonList count={3} caption="Cooking up your first ideas…" />
+          ) : (
+            tasteRecipes.map((r) => <RecipeCard key={r.id} recipe={r} />)
+          )}
+        </div>
+        <button
+          onClick={() => requirePremium("Everything in Sift")}
+          className="btn-primary mt-5 w-full"
+        >
+          ✨ Want unlimited? Free for 7 days
+        </button>
         <button
           onClick={() => router.replace("/")}
-          className="mt-4 py-3 text-center text-sm font-semibold text-gray-500"
+          className="mt-2 py-3 text-center text-sm font-semibold text-gray-500"
         >
           Continue with the free version
         </button>

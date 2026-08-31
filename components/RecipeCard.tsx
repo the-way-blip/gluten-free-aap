@@ -4,6 +4,7 @@ import { useState } from "react";
 import type { Recipe } from "@/lib/types";
 import { useSift } from "@/lib/store";
 import { scaleQuantity } from "@/lib/scale";
+import { maybeAskReview } from "@/lib/review";
 
 const SHARE_URL = "https://sift-self.vercel.app/download?utm_source=share&utm_medium=recipe";
 
@@ -233,7 +234,14 @@ export function RecipeCard({ recipe }: { recipe: Recipe }) {
 
           <div className="mt-4 flex gap-2">
             <button
-              onClick={() => (saved ? unsaveRecipe(recipe.id) : saveRecipe(recipe))}
+              onClick={() => {
+                if (saved) {
+                  unsaveRecipe(recipe.id);
+                } else {
+                  saveRecipe(recipe);
+                  void maybeAskReview();
+                }
+              }}
               className={saved ? "btn-secondary flex-1" : "btn-primary flex-1"}
             >
               {saved ? "★ Saved" : "☆ Save"}

@@ -96,27 +96,40 @@ export function Paywall({
 
         {billingActive ? (
           <div className="mt-5 space-y-2">
-            <button
-              disabled={busy !== null}
-              onClick={() => buy("sift_premium_yearly")}
-              className="btn-primary block w-full disabled:opacity-60"
-            >
-              {busy === "sift_premium_yearly"
-                ? "Starting…"
-                : yearly
-                  ? `Start free trial — then ${yearly.displayPrice}/yr`
-                  : `Start ${TRIAL_DAYS}-day free trial (Yearly)`}
-            </button>
+            <div className="rounded-2xl border-2 border-leaf-600 bg-leaf-50/60 p-3">
+              <div className="mb-2 flex items-center justify-center gap-2">
+                <span className="rounded-full bg-leaf-600 px-2.5 py-0.5 text-[10px] font-extrabold uppercase tracking-wide text-white">
+                  Best value
+                </span>
+                <span className="text-xs font-bold text-leaf-700">Save 35%</span>
+              </div>
+              <div className="mb-2 text-center">
+                <span className="font-display text-2xl font-semibold text-grain-900">
+                  $3.25
+                </span>
+                <span className="text-sm text-gray-500">/month</span>
+                <div className="text-[11px] text-gray-500">
+                  billed {yearly ? yearly.displayPrice : "$39"} once a year
+                </div>
+              </div>
+              <button
+                disabled={busy !== null}
+                onClick={() => buy("sift_premium_yearly")}
+                className="btn-primary block w-full disabled:opacity-60"
+              >
+                {busy === "sift_premium_yearly"
+                  ? "Starting…"
+                  : `Start my ${TRIAL_DAYS}-day free trial`}
+              </button>
+            </div>
             <button
               disabled={busy !== null}
               onClick={() => buy("sift_premium_monthly")}
-              className="btn-secondary block w-full disabled:opacity-60"
+              className="block w-full py-1.5 text-center text-xs font-semibold text-gray-500 underline disabled:opacity-60"
             >
               {busy === "sift_premium_monthly"
                 ? "Starting…"
-                : monthly
-                  ? `Monthly — ${monthly.displayPrice}/mo`
-                  : "Monthly plan"}
+                : `or ${monthly ? monthly.displayPrice : "$4.99"}/month — also with a free week`}
             </button>
             <button
               disabled={busy !== null}

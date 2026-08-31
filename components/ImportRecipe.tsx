@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { Capacitor, CapacitorHttp } from "@capacitor/core";
 import { extractFromHtml } from "@/lib/import-source";
+import { maybeAskReview } from "@/lib/review";
 import { usePremium } from "@/components/PremiumProvider";
 import { TRIAL_DAYS } from "@/lib/subscription";
 import { RecipeCard } from "@/components/RecipeCard";
@@ -88,6 +89,7 @@ export function ImportRecipe({
         return;
       }
       setResult(data as ImportResult);
+      void maybeAskReview();
       try {
         window.localStorage.setItem(FREE_KEY, "1");
       } catch {

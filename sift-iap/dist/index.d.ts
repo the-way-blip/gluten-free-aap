@@ -30,6 +30,7 @@ export interface SiftIapPlugin {
   getProducts(): Promise<{ products: SiftProduct[] }>;
   purchase(options: { productId: string }): Promise<PurchaseResult>;
   restore(): Promise<EntitlementInfo>;
+  requestReview(): Promise<Record<string, never>>;
   getEntitlement(): Promise<EntitlementInfo>;
   addListener(
     eventName: 'entitlementChanged',
