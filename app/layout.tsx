@@ -7,6 +7,7 @@ import { CloudSync } from "@/components/CloudSync";
 import { CLERK_ENABLED } from "@/lib/cloud-config";
 import { PremiumProvider } from "@/components/PremiumProvider";
 import { PaywallModal } from "@/components/PaywallModal";
+import { PremiumBar } from "@/components/PremiumBar";
 import { MetaPixel } from "@/components/MetaPixel";
 import { DeepLinks } from "@/components/DeepLinks";
 
@@ -53,10 +54,11 @@ export default function RootLayout({
         <SiftProvider>
           <PremiumProvider>
             {CLERK_ENABLED && <CloudSync />}
-            <div className="mx-auto min-h-screen max-w-md pb-24 shadow-xl sm:my-0 sm:min-h-screen">
+            <div className="mx-auto min-h-screen max-w-md pb-36 shadow-xl sm:my-0 sm:min-h-screen">
               {children}
             </div>
             <Nav />
+            <PremiumBar />
             <PaywallModal />
           </PremiumProvider>
         </SiftProvider>

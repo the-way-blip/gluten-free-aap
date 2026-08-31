@@ -17,7 +17,11 @@ export function TrialBanner() {
 
   useEffect(() => {
     try {
-      setDismissed(window.localStorage.getItem(DISMISS_KEY) === "1");
+      // Dismissal expires after 3 days — a one-time × shouldn't hide the
+      // trial forever from someone who installed on day one and never saw it.
+      const raw = window.localStorage.getItem(DISMISS_KEY);
+      const ts = raw ? Number(raw) : 0;
+      setDismissed(!!ts && Date.now() - ts < 3 * 24 * 60 * 60 * 1000);
     } catch {
       setDismissed(false);
     }
@@ -28,7 +32,7 @@ export function TrialBanner() {
   function dismiss() {
     setDismissed(true);
     try {
-      window.localStorage.setItem(DISMISS_KEY, "1");
+      window.localStorage.setItem(DISMISS_KEY, String(Date.now()));
     } catch {
       /* ignore */
     }
@@ -50,8 +54,9 @@ export function TrialBanner() {
         Try Premium free for {TRIAL_DAYS} days
       </h2>
       <p className="mt-1 text-sm text-white/85">
-        Unlimited AI recipes, pantry photo scan, label checks, and personalized
-        restaurant guides — free for a week, then cancel anytime.
+        Import any recipe & make it gluten-free, unlimited AI recipes, label
+        checks, and personalized restaurant guides — free for a week, cancel
+        anytime.
       </p>
       <button
         onClick={() => requirePremium("Sift Premium")}
