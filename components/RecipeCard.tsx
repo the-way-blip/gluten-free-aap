@@ -7,7 +7,7 @@ import { scaleQuantity } from "@/lib/scale";
 import { maybeAskReview } from "@/lib/review";
 import { trackGA } from "@/components/GoogleAnalytics";
 
-const SHARE_URL = "https://sift-self.vercel.app/download?utm_source=share&utm_medium=recipe";
+const SHARE_URL = "https://eatsift.app/download?utm_source=share&utm_medium=recipe";
 
 function shareText(recipe: Recipe): string {
   const swaps =

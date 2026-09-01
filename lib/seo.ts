@@ -9,6 +9,6 @@ export function slugify(s: string): string {
     .replace(/^-+|-+$/g, "");
 }
 
-export const SITE = "https://sift-self.vercel.app";
+export const SITE = "https://eatsift.app";
 
 export const DOWNLOAD_PATH = "/download?utm_source=seo&utm_medium=guide";

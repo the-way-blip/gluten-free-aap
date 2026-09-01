@@ -14,6 +14,7 @@ import { GoogleAnalytics } from "@/components/GoogleAnalytics";
 import { DeepLinks } from "@/components/DeepLinks";
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://eatsift.app"),
   title: "Sift — Eat gluten-free with ease",
   description:
     "Personalized gluten-free recipes, pantry-based meal ideas, smart shopping lists, and restaurant ordering guides tailored to how strict you need to be.",
