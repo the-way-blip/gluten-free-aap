@@ -9,7 +9,8 @@ import path from "node:path";
 
 const HOST = "eatsift.app";
 const KEY = "43fe0058c0b749377fbfe0039feac3df";
-const ENDPOINT = "https://api.indexnow.org/indexnow";
+// Tried in order; stops at the first that accepts the list.
+const ENDPOINTS = ["https://api.indexnow.org/indexnow", "https://www.bing.com/indexnow"];
 const SITEMAP_BODY = path.join(process.cwd(), ".next/server/app/sitemap.xml.body");
 
 async function main() {
@@ -42,23 +43,34 @@ async function main() {
     return;
   }
 
+  const body = JSON.stringify({
+    host: HOST,
+    key: KEY,
+    keyLocation: `https://${HOST}/${KEY}.txt`,
+    urlList,
+  });
+  for (const endpoint of ENDPOINTS) {
+    const ok = await send(endpoint, body, urlList.length);
+    if (ok) return;
+  }
+}
+
+async function send(endpoint, body, count) {
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), 15000);
   try {
-    const res = await fetch(ENDPOINT, {
+    const res = await fetch(endpoint, {
       method: "POST",
       headers: { "Content-Type": "application/json; charset=utf-8" },
-      body: JSON.stringify({
-        host: HOST,
-        key: KEY,
-        keyLocation: `https://${HOST}/${KEY}.txt`,
-        urlList,
-      }),
+      body,
       signal: controller.signal,
     });
-    console.log(`[indexnow] Sent ${urlList.length} URLs, response ${res.status} ${res.statusText}`);
+    const text = (await res.text().catch(() => "")).replace(/\s+/g, " ").slice(0, 300);
+    console.log(`[indexnow] ${endpoint}: sent ${count} URLs, response ${res.status} ${res.statusText}${text ? ` - ${text}` : ""}`);
+    return res.ok;
   } catch (err) {
-    console.log(`[indexnow] Ping failed (build continues): ${err?.message ?? err}`);
+    console.log(`[indexnow] ${endpoint}: ping failed (build continues): ${err?.message ?? err}`);
+    return false;
   } finally {
     clearTimeout(timer);
   }
