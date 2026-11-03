@@ -7,9 +7,10 @@ export const dynamic = "force-static";
 
 export async function GET() {
   if (!reviewEnabled()) return new NextResponse("Not found", { status: 404 });
-  const picked = await pickedPhotos(PHOTO_PICKS);
-  return NextResponse.json(
-    picked.map(({ slug, photo: p }) => ({
+  const { found: picked, missing } = await pickedPhotos(PHOTO_PICKS);
+  return NextResponse.json({
+    missing,
+    photos: picked.map(({ slug, photo: p }) => ({
       slug,
       id: p.id,
       alt: p.alt,
@@ -18,6 +19,7 @@ export async function GET() {
       pageUrl: p.pageUrl,
       original: p.original,
     })),
+  },
     { headers: { "X-Robots-Tag": "noindex" } }
   );
 }

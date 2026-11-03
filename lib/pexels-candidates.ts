@@ -61,11 +61,41 @@ export async function allCandidates(): Promise<RecipeCandidates[]> {
   return out;
 }
 
-/** Preview-only: the picked candidate for each recipe in PHOTO_PICKS. */
+/** Preview-only: looks up one photo by id (one API call, cached). */
+async function photoById(id: number): Promise<Candidate | null> {
+  try {
+    const res = await fetch(`https://api.pexels.com/v1/photos/${id}`, {
+      headers: { Authorization: process.env.PEXELS_API_KEY ?? "" },
+      cache: "force-cache",
+    });
+    if (!res.ok) return null;
+    const p = (await res.json()) as any;
+    return {
+      id: p.id,
+      alt: p.alt ?? "",
+      width: p.width,
+      height: p.height,
+      photographer: p.photographer,
+      photographerUrl: p.photographer_url,
+      pageUrl: p.url,
+      original: p.src?.original,
+      thumb: p.src?.medium,
+    };
+  } catch {
+    return null;
+  }
+}
+
+/** Preview-only: the picked photo for each recipe in PHOTO_PICKS, plus any ids that failed. */
 export async function pickedPhotos(picks: Record<string, number>) {
-  const all = await allCandidates();
-  return all
-    .filter((r) => picks[r.slug])
-    .map((r) => ({ slug: r.slug, title: r.title, photo: r.candidates.find((c) => c.id === picks[r.slug]) }))
-    .filter((r): r is { slug: string; title: string; photo: Candidate } => !!r.photo);
+  if (!reviewEnabled()) return { found: [], missing: [] as string[] };
+  const titles = new Map(PUBLIC_RECIPES.map((r) => [recipeSlug(r), r.title]));
+  const found: { slug: string; title: string; photo: Candidate }[] = [];
+  const missing: string[] = [];
+  for (const [slug, id] of Object.entries(picks)) {
+    const photo = await photoById(id);
+    if (photo) found.push({ slug, title: titles.get(slug) ?? slug, photo });
+    else missing.push(slug);
+  }
+  return { found, missing };
 }

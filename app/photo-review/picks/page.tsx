@@ -9,9 +9,10 @@ export const metadata: Metadata = { title: "Photo picks", robots: { index: false
 
 export default async function PhotoPicks() {
   if (!reviewEnabled()) notFound();
-  const picked = await pickedPhotos(PHOTO_PICKS);
+  const { found: picked, missing } = await pickedPhotos(PHOTO_PICKS);
   return (
     <main style={{ padding: 8, maxWidth: "none" }}>
+      <p>{picked.length} photos, {missing.length} failed to load</p>
       <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 6 }}>
         {picked.map((r, i) => (
           <figure key={r.slug} style={{ margin: 0 }}>
