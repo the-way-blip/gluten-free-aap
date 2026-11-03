@@ -27,6 +27,11 @@ export default function EatIndexPage() {
         shared-fryer risks and celiac-level ordering tips. Guidance, not medical
         advice; menus vary by location, so always confirm with staff.
       </p>
+      <p className="mt-3">
+        <Link href="/gluten-free-fast-food" className="font-semibold text-leaf-700 underline">
+          See fast food chains ranked for celiac
+        </Link>
+      </p>
       {[...byCategory.entries()].map(([cat, list]) => (
         <section key={cat} className="mt-8">
           <h2 className="text-sm font-semibold uppercase tracking-wide text-gray-400">{cat}</h2>

@@ -2,9 +2,9 @@ import Link from "next/link";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { SEED_RESTAURANTS } from "@/lib/seed-restaurants";
-import { slugify, SITE, DOWNLOAD_PATH, clip, breadcrumbLd, faqLd } from "@/lib/seo";
+import { slugify, SITE, DOWNLOAD_PATH, clip, breadcrumbLd, faqLd, STRICT_CELIAC } from "@/lib/seo";
 import { gradeFor, GRADE_LABELS } from "@/lib/grading";
-import type { GFProfile, Restaurant } from "@/lib/types";
+import type { Restaurant } from "@/lib/types";
 
 /** Public, server-rendered SEO guide for one restaurant chain. */
 
@@ -15,20 +15,6 @@ export function generateStaticParams() {
 function find(slug: string) {
   return SEED_RESTAURANTS.find((r) => slugify(r.name) === slug);
 }
-
-/** A strict celiac eater: no shared fryers, surfaces, traces or regular oats. */
-const STRICT_CELIAC: GFProfile = {
-  reason: "celiac",
-  strictness: "strict",
-  crossContamination: {
-    sharedFryer: false,
-    sharedSurfaces: false,
-    mayContainTraces: false,
-    regularOats: false,
-  },
-  otherAvoidances: [],
-  createdAt: 0,
-};
 
 function fryerAnswer(r: Restaurant): string {
   if (r.fryer === "none")

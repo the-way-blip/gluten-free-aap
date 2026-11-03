@@ -128,6 +128,31 @@ export default function WelcomePage() {
               Is it gluten-free? Ingredient guide (110+ ingredients)
             </Link>
           </li>
+          <li>
+            <Link href="/gluten-free-fast-food" className="font-semibold text-leaf-700 underline">
+              Gluten-free fast food, ranked for celiac
+            </Link>
+          </li>
+          <li>
+            <Link href="/gluten-free-brands" className="font-semibold text-leaf-700 underline">
+              Best gluten-free brands to buy
+            </Link>
+          </li>
+          <li>
+            <Link href="/gluten-free-recipes" className="font-semibold text-leaf-700 underline">
+              Easy gluten-free recipes
+            </Link>
+          </li>
+          <li>
+            <Link href="/learn/make-any-recipe-gluten-free" className="font-semibold text-leaf-700 underline">
+              How to make any recipe gluten-free
+            </Link>
+          </li>
+          <li>
+            <Link href="/learn/just-diagnosed-with-celiac" className="font-semibold text-leaf-700 underline">
+              Just diagnosed with celiac? Start here
+            </Link>
+          </li>
         </ul>
       </section>
 

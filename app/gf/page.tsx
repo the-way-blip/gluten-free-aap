@@ -23,6 +23,11 @@ export default function GfIndexPage() {
         Plain-English answers for {GLUTEN_TERMS.length}+ ingredients and label
         terms. Always verify the actual label — formulations vary by brand.
       </p>
+      <p className="mt-3">
+        <Link href="/gluten-free-brands" className="font-semibold text-leaf-700 underline">
+          Best gluten-free brands to buy
+        </Link>
+      </p>
       <ul className="mt-6 space-y-1.5">
         {sorted.map((t) => (
           <li key={t.term} className="flex items-center gap-2">

@@ -1,5 +1,7 @@
 /** Shared helpers for the public SEO guide pages (server-side). */
 
+import type { GFProfile } from "./types";
+
 export function slugify(s: string): string {
   return s
     .toLowerCase()
@@ -47,3 +49,17 @@ export function faqLd(faqs: { q: string; a: string }[]) {
     })),
   };
 }
+
+/** A strict celiac eater: no shared fryers, surfaces, traces or regular oats. */
+export const STRICT_CELIAC: GFProfile = {
+  reason: "celiac",
+  strictness: "strict",
+  crossContamination: {
+    sharedFryer: false,
+    sharedSurfaces: false,
+    mayContainTraces: false,
+    regularOats: false,
+  },
+  otherAvoidances: [],
+  createdAt: 0,
+};
