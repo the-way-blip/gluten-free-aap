@@ -60,3 +60,12 @@ export async function allCandidates(): Promise<RecipeCandidates[]> {
   }
   return out;
 }
+
+/** Preview-only: the picked candidate for each recipe in PHOTO_PICKS. */
+export async function pickedPhotos(picks: Record<string, number>) {
+  const all = await allCandidates();
+  return all
+    .filter((r) => picks[r.slug])
+    .map((r) => ({ slug: r.slug, title: r.title, photo: r.candidates.find((c) => c.id === picks[r.slug]) }))
+    .filter((r): r is { slug: string; title: string; photo: Candidate } => !!r.photo);
+}

@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { PUBLIC_RECIPES, recipeSlug, findRecipe, cuisineLabel } from "@/lib/recipe-pages";
 import { SITE, clip, breadcrumbLd } from "@/lib/seo";
 import { GuideCta, JsonLd } from "@/components/GuideCta";
+import { RECIPE_IMAGES, pexelsSrc, schemaImages } from "@/lib/recipe-images";
 
 /** Public, server-rendered page for one of Sift's built-in gluten-free recipes. */
 
@@ -19,12 +20,20 @@ export function generateMetadata({ params }: { params: { slug: string } }): Meta
     title: t.length + 7 <= 60 ? `${t} | Sift` : t,
     description: clip(`${r.description} Ready in ${r.time} minutes, serves ${r.servings}.`),
     alternates: { canonical: `${SITE}/gluten-free-recipes/${params.slug}` },
+    ...(RECIPE_IMAGES[params.slug]
+      ? {
+          openGraph: {
+            images: [{ url: pexelsSrc(RECIPE_IMAGES[params.slug], 1200, 630), width: 1200, height: 630, alt: RECIPE_IMAGES[params.slug].alt }],
+          },
+        }
+      : {}),
   };
 }
 
 export default function RecipePage({ params }: { params: { slug: string } }) {
   const r = findRecipe(params.slug);
   if (!r) notFound();
+  const img = RECIPE_IMAGES[params.slug];
   const more = PUBLIC_RECIPES.filter((o) => o.cuisine === r.cuisine && o.id !== r.id).slice(0, 5);
 
   const ld = [
@@ -37,6 +46,7 @@ export default function RecipePage({ params }: { params: { slug: string } }) {
       "@type": "Recipe",
       name: r.title,
       description: r.description,
+      ...(img ? { image: schemaImages(img) } : {}),
       totalTime: `PT${r.time}M`,
       recipeYield: `${r.servings} servings`,
       recipeCuisine: cuisineLabel(r.cuisine),
@@ -58,6 +68,30 @@ export default function RecipePage({ params }: { params: { slug: string } }) {
       <h1 className="font-display mt-1 text-3xl font-semibold text-grain-900">
         Gluten-free {r.title.toLowerCase()}
       </h1>
+      {img && (
+        <figure className="mt-4">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={pexelsSrc(img, 1200, 675)}
+            srcSet={`${pexelsSrc(img, 640, 360)} 640w, ${pexelsSrc(img, 1200, 675)} 1200w`}
+            sizes="(max-width: 672px) 100vw, 672px"
+            width={1200}
+            height={675}
+            alt={img.alt}
+            className="w-full rounded-2xl object-cover"
+          />
+          <figcaption className="mt-1 text-xs text-gray-400">
+            Photo by{" "}
+            <a href={img.photographerUrl} className="underline" rel="nofollow noopener" target="_blank">
+              {img.photographer}
+            </a>{" "}
+            on{" "}
+            <a href={img.pageUrl} className="underline" rel="nofollow noopener" target="_blank">
+              Pexels
+            </a>
+          </figcaption>
+        </figure>
+      )}
       <p className="mt-3 leading-relaxed text-gray-700">{r.description}</p>
       <div className="mt-3 flex flex-wrap gap-2 text-xs font-semibold">
         <span className="chip bg-leaf-50 text-leaf-700">{r.time} min</span>
