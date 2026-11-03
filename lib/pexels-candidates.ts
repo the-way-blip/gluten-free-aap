@@ -66,7 +66,7 @@ async function photoById(id: number): Promise<Candidate | null> {
   try {
     const res = await fetch(`https://api.pexels.com/v1/photos/${id}`, {
       headers: { Authorization: process.env.PEXELS_API_KEY ?? "" },
-      cache: "force-cache",
+      cache: "no-store",
     });
     if (!res.ok) return null;
     const p = (await res.json()) as any;

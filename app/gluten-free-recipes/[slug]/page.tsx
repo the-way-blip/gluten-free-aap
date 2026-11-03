@@ -23,6 +23,11 @@ export function generateMetadata({ params }: { params: { slug: string } }): Meta
     ...(RECIPE_IMAGES[params.slug]
       ? {
           openGraph: {
+            type: "article",
+            siteName: "Sift",
+            locale: "en_US",
+            title: t,
+            url: `${SITE}/gluten-free-recipes/${params.slug}`,
             images: [{ url: pexelsSrc(RECIPE_IMAGES[params.slug], 1200, 630), width: 1200, height: 630, alt: RECIPE_IMAGES[params.slug].alt }],
           },
         }

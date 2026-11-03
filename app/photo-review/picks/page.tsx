@@ -1,29 +1,30 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { pickedPhotos, reviewEnabled } from "@/lib/pexels-candidates";
+import { reviewEnabled } from "@/lib/pexels-candidates";
 import { PHOTO_PICKS } from "@/lib/recipe-photo-picks";
+import { PUBLIC_RECIPES, recipeSlug } from "@/lib/recipe-pages";
 
 /** Preview-only contact sheet of the picked recipe photos. 404s on production. */
 export const dynamic = "force-static";
 export const metadata: Metadata = { title: "Photo picks", robots: { index: false, follow: false } };
 
-export default async function PhotoPicks() {
+export default function PhotoPicks() {
   if (!reviewEnabled()) notFound();
-  const { found: picked, missing } = await pickedPhotos(PHOTO_PICKS);
+  const titles = new Map(PUBLIC_RECIPES.map((r) => [recipeSlug(r), r.title]));
+  const picks = Object.entries(PHOTO_PICKS);
   return (
     <main style={{ padding: 8, maxWidth: "none" }}>
-      <p>{picked.length} photos, {missing.length} failed to load</p>
       <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 6 }}>
-        {picked.map((r, i) => (
-          <figure key={r.slug} style={{ margin: 0 }}>
+        {picks.map(([slug, id], i) => (
+          <figure key={slug} style={{ margin: 0 }}>
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
-              src={`${r.photo.original}?auto=compress&cs=tinysrgb&fit=crop&w=600&h=338`}
-              alt={r.photo.alt}
+              src={`https://images.pexels.com/photos/${id}/pexels-photo-${id}.jpeg?auto=compress&cs=tinysrgb&fit=crop&w=600&h=338`}
+              alt=""
               style={{ width: "100%", aspectRatio: "16/9", objectFit: "cover" }}
             />
             <figcaption style={{ fontSize: 12, fontWeight: 700 }}>
-              {i + 1}. {r.title}
+              {i + 1}. {titles.get(slug) ?? slug}
             </figcaption>
           </figure>
         ))}
