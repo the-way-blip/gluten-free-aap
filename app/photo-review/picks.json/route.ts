@@ -5,9 +5,13 @@ import { PHOTO_PICKS } from "@/lib/recipe-photo-picks";
 /** Preview-only: full credit data for the picked photos, fetched on request. */
 export const dynamic = "force-dynamic";
 
-export async function GET() {
+export async function GET(req: Request) {
   if (!reviewEnabled()) return new NextResponse("Not found", { status: 404 });
-  const { found: picked, missing } = await pickedPhotos(PHOTO_PICKS);
+  const only = new URL(req.url).searchParams.get("only");
+  const wanted = only
+    ? Object.fromEntries(Object.entries(PHOTO_PICKS).filter(([slug]) => only.split(",").includes(slug)))
+    : PHOTO_PICKS;
+  const { found: picked, missing } = await pickedPhotos(wanted);
   return NextResponse.json({
     missing,
     photos: picked.map(({ slug, photo: p }) => ({
