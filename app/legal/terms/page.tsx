@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { Header } from "@/components/Header";
 
-export const metadata = { title: "Terms of Service — Sift" };
+export const metadata = { title: "Terms of Service — Sift", alternates: { canonical: "/legal/terms" } };
 
 export default function TermsPage() {
   return (

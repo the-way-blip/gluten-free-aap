@@ -1,10 +1,13 @@
-import { AppStoreBadge, APP_STORE_URL } from "@/components/AppStoreBadge";
+import { AppStoreBadge } from "@/components/AppStoreBadge";
 import { Doodle } from "@/components/Doodle";
+import type { Metadata } from "next";
 
-export const metadata = {
+export const metadata: Metadata = {
   title: "Get Sift — Gluten-free, made easy",
   description:
     "Download Sift free on the App Store. Personalized gluten-free recipes, safe restaurants, and smart shopping — with a 7-day free Premium trial.",
+  // Guide CTAs link here with UTM params; consolidate them on one URL.
+  alternates: { canonical: "/download" },
 };
 
 const PERKS = [
@@ -49,9 +52,7 @@ export default function DownloadPage() {
         for 7 days — then cancel anytime.
       </div>
 
-      <a href={APP_STORE_URL} className="mt-7" aria-label="Download Sift on the App Store">
-        <AppStoreBadge height={56} />
-      </a>
+      <AppStoreBadge height={56} className="mt-7" />
       <p className="mt-2 text-xs text-gray-400">Free on the App Store · iPhone</p>
 
       <ul className="mt-9 w-full space-y-3 text-left">

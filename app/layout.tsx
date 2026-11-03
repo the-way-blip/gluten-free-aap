@@ -19,6 +19,16 @@ export const metadata: Metadata = {
   description:
     "Personalized gluten-free recipes, pantry-based meal ideas, smart shopping lists, and restaurant ordering guides tailored to how strict you need to be.",
   manifest: "/manifest.webmanifest",
+  applicationName: "Sift",
+  openGraph: {
+    type: "website",
+    siteName: "Sift",
+    locale: "en_US",
+    images: ["/ad/sift-ad-import.png"],
+  },
+  twitter: { card: "summary_large_image" },
+  // Safari Smart App Banner: offers the App Store download on iPhone visits.
+  itunes: { appId: "6775724538" },
   appleWebApp: {
     capable: true,
     statusBarStyle: "default",

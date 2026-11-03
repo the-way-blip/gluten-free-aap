@@ -45,16 +45,28 @@ const FEATURES = [
   },
 ];
 
-const jsonLd = {
-  "@context": "https://schema.org",
-  "@type": "MobileApplication",
-  name: "Sift - Gluten-Free Made Easy",
-  operatingSystem: "iOS",
-  applicationCategory: "HealthApplication",
-  url: "https://eatsift.app",
-  downloadUrl: APP_STORE_URL,
-  offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
-};
+const jsonLd = [
+  {
+    "@context": "https://schema.org",
+    "@type": "MobileApplication",
+    name: "Sift - Gluten-Free Made Easy",
+    operatingSystem: "iOS",
+    applicationCategory: "HealthApplication",
+    url: "https://eatsift.app",
+    downloadUrl: APP_STORE_URL,
+    installUrl: APP_STORE_URL,
+    image: "https://eatsift.app/sift-icon.png",
+    description:
+      "Turn any recipe gluten-free, check ingredient labels, and see what's safe to order at 80+ restaurant chains.",
+    offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    name: "Sift",
+    url: "https://eatsift.app",
+  },
+];
 
 export default function WelcomePage() {
   return (
@@ -79,9 +91,7 @@ export default function WelcomePage() {
         eat out — set to how careful you need to be.
       </p>
 
-      <a href={APP_STORE_URL} className="mt-7 inline-block" aria-label="Download Sift on the App Store">
-        <AppStoreBadge height={56} />
-      </a>
+      <AppStoreBadge height={56} className="mt-7" />
       <p className="mt-2 text-sm text-gray-500">
         Free on iPhone · Premium includes a 7-day free trial
       </p>
@@ -123,9 +133,7 @@ export default function WelcomePage() {
 
       <div className="card mt-12 p-5 text-center">
         <p className="font-semibold text-grain-900">Ready to try it?</p>
-        <a href={APP_STORE_URL} className="mt-3 inline-block" aria-label="Download Sift on the App Store">
-          <AppStoreBadge height={48} />
-        </a>
+        <AppStoreBadge height={48} className="mt-3" />
         <p className="mt-3 text-sm text-gray-500">
           No iPhone?{" "}
           <a href="/?app=1" className="underline">

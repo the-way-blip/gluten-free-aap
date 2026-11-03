@@ -1,6 +1,6 @@
 import { Header } from "@/components/Header";
 
-export const metadata = { title: "Privacy Policy — Sift" };
+export const metadata = { title: "Privacy Policy — Sift", alternates: { canonical: "/legal/privacy" } };
 
 export default function PrivacyPage() {
   return (

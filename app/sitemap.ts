@@ -10,6 +10,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${SITE}/download`, lastModified: now },
     { url: `${SITE}/eat`, lastModified: now },
     { url: `${SITE}/gf`, lastModified: now },
+    { url: `${SITE}/learn`, lastModified: now },
     ...SEED_RESTAURANTS.map((r) => ({
       url: `${SITE}/eat/${slugify(r.name)}`,
       lastModified: now,

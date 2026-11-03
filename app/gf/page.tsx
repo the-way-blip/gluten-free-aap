@@ -7,6 +7,7 @@ export const metadata: Metadata = {
   title: "Is It Gluten-Free? 100+ Ingredients Explained | Sift",
   description:
     "Quick answers for 100+ ingredients and label terms — soy sauce, malt, maltodextrin, oats, modified food starch and more. Know what contains gluten before you buy.",
+  alternates: { canonical: "/gf" },
 };
 
 export default function GfIndexPage() {

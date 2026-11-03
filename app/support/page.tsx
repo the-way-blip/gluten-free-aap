@@ -2,7 +2,7 @@ import Link from "next/link";
 import { Header } from "@/components/Header";
 import { AppStoreBadge } from "@/components/AppStoreBadge";
 
-export const metadata = { title: "Support — Sift" };
+export const metadata = { title: "Support — Sift", alternates: { canonical: "/support" } };
 
 const FAQ = [
   {

@@ -1,6 +1,6 @@
 import { Header } from "@/components/Header";
 
-export const metadata = { title: "Medical Disclaimer — Sift" };
+export const metadata = { title: "Medical Disclaimer — Sift", alternates: { canonical: "/legal/disclaimer" } };
 
 export default function DisclaimerPage() {
   return (

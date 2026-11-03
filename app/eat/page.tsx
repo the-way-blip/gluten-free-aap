@@ -7,6 +7,7 @@ export const metadata: Metadata = {
   title: "Gluten-Free Restaurant Guides — What's Safe to Order | Sift",
   description:
     "Gluten-free guides for 80+ US restaurant chains: what's naturally gluten-free, what to modify, shared-fryer risks, and how to order safely with celiac.",
+  alternates: { canonical: "/eat" },
 };
 
 export default function EatIndexPage() {
