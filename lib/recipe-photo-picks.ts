@@ -21,7 +21,7 @@ export const PHOTO_PICKS: Record<string, number> = {
   "mediterranean-lemon-chicken-orzo-soup": 10692533,
   "mediterranean-stuffed-bell-peppers": 15747862,
   "american-bbq-pulled-chicken-stuffed-potatoes": 30146068,
-  "nicoise-salad": 19859336,
+  "nicoise-salad": 36895292,
   "mediterranean-chickpea-quinoa-salad": 38499046,
   "american-cobb-salad": 30700803,
   "parmesan-roasted-asparagus": 4050980,
